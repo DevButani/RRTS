@@ -1,3 +1,1 @@
 # RRTS
-
-Hello World
