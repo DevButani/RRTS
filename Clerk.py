@@ -16,7 +16,7 @@ def clerk_page(window,locality):
     street_name=StringVar()
     street_name.set("")
     def register_entries():
-        entry_list=[{"Locality":str(locality),"Street":street_name.get(),"Problem":prob_type.get(),"Reporting_Date":str(date.today())}]
+        entry_list=[{"Locality":str(locality),"Street":street_name.get(),"Problem":prob_type.get(),"Reporting Date":str(date.today())}]
         entry_df=pd.DataFrame(entry_list)
         commit_changes(clerk_file,entry_df)
         prob_type.set('--')
