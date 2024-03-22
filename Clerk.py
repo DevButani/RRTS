@@ -10,7 +10,7 @@ def commit_changes(file_name,append_df):
 
 def clerk_page(window,locality):
     #clerk_db=pd.read_csv("File_name.csv")
-    clerk_file="Name of file.csv"
+    clerk_file=locality+".csv"
     prob_type=StringVar()
     prob_type.set("--")
     street_name=StringVar()
