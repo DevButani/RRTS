@@ -19,34 +19,13 @@ gauth.SaveCredentialsFile("credentials.json")
 
 drive = GoogleDrive(gauth)
 
+# retrieve database
 database_folder = '1H5CUI-DRExlAleJwr0P_jlwh5c_GUJem'
-database_file = {
-    "Resources": '1Kch6wegCBl79aZ3GCumooUD3kf0AiczK',   
-    "Andheri": '1uQmkMJ6WRrktjtluRVDeb4phLNa6OGhi', 
-    "Bandra": '1p2-3kDQMVvYlfdKWOxvLKZKPXD3n2MaZ', 
-    "Bhandup": '1piblx94dnAYaEu3uW_t_lGK5PpItT_4U', 
-    "Bhuleshwar": '1PkItOOVEVwSxxWKQEtICa7WtArM8k8mX',
-    "Borivali": '12aF6K3sCxs4bKNj-4sgpybn7qXNuIf5H', 
-    "Breach_Candy": '1RIWKis7uC0sxuRSdK-ujE-uqkfoSkTa5', 
-    "Chembur": '1aUSOWKNt8xeAkChIp1W8r7r5uJwR9bVi',
-    "Colaba": '1E5NowBDwsRiAkV6sNYSIkFep0vERtqUp', 
-    "Dadar": '1H5Lyx0ZhDTgJl-Dm4DTMWpaZ_ELWqi8z',
-    "Dharavi": '16oaj-66QpOUfm0lce6ID7k3zwVsNur-9',
-    "Fort": '1e3l2nsYocwqSG9U5a43b-lFUEwZu6-Ik', 
-    "Ghatkopar": '1ZfNPLBsuPdsiNTeVog0E_iGazl_nXlR9', 
-    "Goregaon": '1V1_9g2DSzRi3Bd2fbCExmZ5GJZ369ZTD', 
-    "Juhu": '19nwDvj59vka9lC0MP7RBUDt6aAvBWedt', 
-    "Kandivali": '1-sEMBEdveHMdM0Y4ImP4u_rYySyiUYcm',    
-    "Malabar_Hill": '1bI9einhN0n4ommH8iiQPeOsjtOP7z_mS', 
-    "Malad": '1Im_RxMa_-vjQXrLwW4CCHjgnXJvSItVE', 
-    "Mulund": '1z3S9t1vnJ0rLV-sIb3Z67NERyZ_aEi-U', 
-    "Pali_Hill": '1ABHuWKqxYylkiY33IXAyZn7oXcbQUaG_', 
-    "Powai": '1wFVnh9QaoYM_N-3yUB7NLhFz3AXB7DFO', 
-    "Tardeo": '1DjKJdD3sc7lNuBfJ9JvawxHczr9orcvn',
-    "Versova": '1lj_2M99ju2jjJMU_nP2ehVZyCeCoCWFz',  
-    "Worli": '1WEBboym8FZ6F3hlGe-vsiZlwDETGAZwP'
-}
-
+links_file = '1i-PIzY2z8a0V7QKijE5zBI4bqPng749O'
+links_df = pd.read_csv('https://drive.google.com/uc?id='+links_file)
+database_file = {}
+for col in links_df.columns:
+    database_file[col] = links_df[col][0]
 localities_list = ["Andheri","Bandra","Bhandup","Bhuleshwar","Borivali","Breach_Candy","Chembur","Colaba","Dadar","Dharavi","Fort","Ghatkopar","Goregaon","Juhu","Kandivali","Malabar_Hill","Malad","Mulund","Pali_Hill","Powai","Tardeo","Versova","Worli"]
 
 # map categories to values
@@ -167,7 +146,7 @@ while True:
     # push changes to the databases
     file_obj = drive.CreateFile({'parents': [{'id': database_folder}], 'id': database_file['Resources']})
     resources_df.to_csv('temp.csv', index=False)
-    file_obj.SetContentFile(filename = 'temp.csv')
+    file_obj.SetContentFile(filename='temp.csv')
     file_obj.Upload()
     
     complaints_df = pd.concat([complaints_df,pending_complaints_df], ignore_index=True)
@@ -175,5 +154,5 @@ while True:
     for locality in localities_list:
         file_obj = drive.CreateFile({'parents': [{'id': database_folder}], 'id': database_file[locality]})
         complaints_df[complaints_df['Locality']==locality.replace('_',' ')].to_csv('temp.csv', index=False)
-        file_obj.SetContentFile(filename = 'temp.csv')
+        file_obj.SetContentFile(filename='temp.csv')
         file_obj.Upload()
