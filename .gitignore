@@ -1,5 +1,5 @@
 # ignore temp.csv
-temp/
+temp.csv
 
 # ignore json files
 *.json
