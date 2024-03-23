@@ -26,7 +26,7 @@ links_df = pd.read_csv('https://drive.google.com/uc?id='+links_file)
 database_file = {}
 for col in links_df.columns:
     database_file[col] = links_df[col][0]
-localities_list = ["Andheri","Bandra","Bhandup","Bhuleshwar","Borivali","Breach_Candy","Chembur","Colaba","Dadar","Dharavi","Fort","Ghatkopar","Goregaon","Juhu","Kandivali","Malabar_Hill","Malad","Mulund","Pali_Hill","Powai","Tardeo","Versova","Worli"]
+localities_list = ["Andheri","Bandra","Bhandup","Bhuleshwar","Borivali","Breach Candy","Chembur","Colaba","Dadar","Dharavi","Fort","Ghatkopar","Goregaon","Juhu","Kandivali","Malabar Hill","Malad","Mulund","Pali Hill","Powai","Tardeo","Versova","Worli"]
 
 # map categories to values
 severity_map = {"Critical": 3, "Severe": 2, "Moderate": 1, "Mild": 0}
@@ -153,6 +153,6 @@ while True:
     complaints_df = pd.concat([complaints_df,in_progress_tasks_df], ignore_index=True)
     for locality in localities_list:
         file_obj = drive.CreateFile({'parents': [{'id': database_folder}], 'id': database_file[locality]})
-        complaints_df[complaints_df['Locality']==locality.replace('_',' ')].to_csv('temp.csv', index=False)
+        complaints_df[complaints_df['Locality']==locality].to_csv('temp.csv', index=False)
         file_obj.SetContentFile(filename='temp.csv')
         file_obj.Upload()
