@@ -19,32 +19,32 @@ gauth.SaveCredentialsFile("credentials.json")
 
 drive = GoogleDrive(gauth)
 
-database_folder = '1kkvHF8YdAhyspTZqbeVKEz6XNEWwP_ij'
+database_folder = '1H5CUI-DRExlAleJwr0P_jlwh5c_GUJem'
 database_file = {
-    "Resources": '1gDMbXVq0Lgj5LGoMVZlA8EtUd1dwPnwN',  
-    "Andheri": '1QxjK4TdW8UHn8-ySdrlViXDIoWjX0Dnk', 
-    "Bandra": '1r2ShjWn8S972IoRO5RZsD3OIBNLrU4Kc', 
-    "Bhandup": '19ap2PvVO-ERGGj_LijoPLPvVLMGsUK-B', 
-    "Bhuleshwar": '1Fa8t7XZfQQpIkoEUYpoDS7W-2Nguu3sx',
-    "Borivali": '1xU_K7YBWLrMhm3z1gVWN_2syxY6oKg_1', 
-    "Breach_Candy": '17Urykk8jvu4ppquA4dUfD9e0KY0DYM6h', 
-    "Chembur": '1bIg9f7hHX-Na-F3mFe4xJmpcu0_JAbYT',
-    "Colaba": '1jefLO7aHB92MuTsP2dM8YQBLmxxGp9wh', 
-    "Dadar": '1hHEff7HppBFaXzeT9VoIgefubAJpyZv-',
-    "Dharavi": '1_HKagDggHWGCQy7BiuL8FAu14GAixAXQ',
-    "Fort": '1UrOCR1udJfVb4NCVdXDSIAvPcjVZNM68', 
-    "Ghatkopar": '1XgQpvBTwArD3CeCN-vJ3ATW0UIpUuB4b', 
-    "Goregaon": '11zVyjMPiwEg0c0mGifEDVyWG27ZIjDec', 
-    "Juhu": '1XesefIFase9Ff7O76XiyyGmb_5nwUxdU', 
-    "Kandivali": '1DiODeKtPY_LgcNGASlsHPdPNakuQ7ULJ',    
-    "Malabar_Hill": '1TIRFDh8ujIGhfbgrt-l0ARG8TpDtAgh-', 
-    "Malad": '1OrtbmxDfTOMteImOk6mtsCS6FOjr7jpD', 
-    "Mulund": '1MGCZ0u99lJbXTEWdC9H0b3AXF5c-KhrB', 
-    "Pali_Hill": '1kGQwq6FGQKg0hh9VUMAUNpLK1WANUsGe', 
-    "Powai": '15s3VZW_cU782COa3laqHjLN_w_yLbjnl', 
-    "Tardeo": '1oO0nx7KPFfUcYv2ZUuAe2Qf6nLVWJzKf',
-    "Versova": '1Q6HyxfhwhtGcEN75UI75fJ8xdNRHlP4R',  
-    "Worli": '1tLzhEuwRzfTq2vqRgquwG62KoZoP8uSn', 
+    "Resources": '1Kch6wegCBl79aZ3GCumooUD3kf0AiczK',   
+    "Andheri": '1uQmkMJ6WRrktjtluRVDeb4phLNa6OGhi', 
+    "Bandra": '1p2-3kDQMVvYlfdKWOxvLKZKPXD3n2MaZ', 
+    "Bhandup": '1piblx94dnAYaEu3uW_t_lGK5PpItT_4U', 
+    "Bhuleshwar": '1PkItOOVEVwSxxWKQEtICa7WtArM8k8mX',
+    "Borivali": '12aF6K3sCxs4bKNj-4sgpybn7qXNuIf5H', 
+    "Breach_Candy": '1RIWKis7uC0sxuRSdK-ujE-uqkfoSkTa5', 
+    "Chembur": '1aUSOWKNt8xeAkChIp1W8r7r5uJwR9bVi',
+    "Colaba": '1E5NowBDwsRiAkV6sNYSIkFep0vERtqUp', 
+    "Dadar": '1H5Lyx0ZhDTgJl-Dm4DTMWpaZ_ELWqi8z',
+    "Dharavi": '16oaj-66QpOUfm0lce6ID7k3zwVsNur-9',
+    "Fort": '1e3l2nsYocwqSG9U5a43b-lFUEwZu6-Ik', 
+    "Ghatkopar": '1ZfNPLBsuPdsiNTeVog0E_iGazl_nXlR9', 
+    "Goregaon": '1V1_9g2DSzRi3Bd2fbCExmZ5GJZ369ZTD', 
+    "Juhu": '19nwDvj59vka9lC0MP7RBUDt6aAvBWedt', 
+    "Kandivali": '1-sEMBEdveHMdM0Y4ImP4u_rYySyiUYcm',    
+    "Malabar_Hill": '1bI9einhN0n4ommH8iiQPeOsjtOP7z_mS', 
+    "Malad": '1Im_RxMa_-vjQXrLwW4CCHjgnXJvSItVE', 
+    "Mulund": '1z3S9t1vnJ0rLV-sIb3Z67NERyZ_aEi-U', 
+    "Pali_Hill": '1ABHuWKqxYylkiY33IXAyZn7oXcbQUaG_', 
+    "Powai": '1wFVnh9QaoYM_N-3yUB7NLhFz3AXB7DFO', 
+    "Tardeo": '1DjKJdD3sc7lNuBfJ9JvawxHczr9orcvn',
+    "Versova": '1lj_2M99ju2jjJMU_nP2ehVZyCeCoCWFz',  
+    "Worli": '1WEBboym8FZ6F3hlGe-vsiZlwDETGAZwP'
 }
 
 localities_list = ["Andheri","Bandra","Bhandup","Bhuleshwar","Borivali","Breach_Candy","Chembur","Colaba","Dadar","Dharavi","Fort","Ghatkopar","Goregaon","Juhu","Kandivali","Malabar_Hill","Malad","Mulund","Pali_Hill","Powai","Tardeo","Versova","Worli"]
