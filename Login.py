@@ -4,6 +4,7 @@ import pandas as pd
 from tkinter import *
 import Clerk
 import Supervisor
+import Admin
 
 gauth = GoogleAuth()
 gauth.LoadCredentialsFile("credentials.json")
@@ -34,5 +35,6 @@ window.state('zoomed')
 window.resizable(0, 0)
 window.title('Road Repair and Tracking Software')
 #Clerk.clerk_page(window,Database,"Andheri")
-Supervisor.supervisor_page(window,Database,"Andheri")
+#Supervisor.supervisor_page(window,Database,"Andheri")
+Admin.admin_page(window,Database)
 window.mainloop()

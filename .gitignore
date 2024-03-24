@@ -3,3 +3,6 @@ temp.csv
 
 # ignore json files
 *.json
+
+# ignore cache files
+/__pycache__
