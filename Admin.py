@@ -29,8 +29,8 @@ def admin_page(window,Database):
                 menu.add_command(label=string, command=lambda value=string: resource_name.set(value))
         resource_frame=Frame(admin_frame)
         Label(resource_frame,text="Choose Resource ",font=('Courier New Greek',18)).pack(pady=20)
-        name_list=["Raw Materials","Machines","Personnel"]
-        resource_type_menu=OptionMenu(resource_frame,resource_type,*name_list, command=set_resource_names)
+        type_list=["Raw Materials","Machines","Personnel"]
+        resource_type_menu=OptionMenu(resource_frame,resource_type,*type_list, command=set_resource_names)
         resource_type_menu.config(font=('Courier New Greek',15),width=18)
         resource_type_menu.pack(anchor=CENTER,padx=70)
 
