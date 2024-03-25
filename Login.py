@@ -181,6 +181,8 @@ def loginUser():
             else:
                 userType=login_info_df['Type'][ind]
                 userLocality=login_info_df['Locality'][ind]
+                email_entry1.delete(0, END)
+                password_entry1.delete(0, END)
                 if userType=="Clerk":
                     Clerk.clerk_page(window,Database,userLocality)
                 elif userType=="Supervisor":
