@@ -26,7 +26,7 @@ links_df = pd.read_csv('https://drive.google.com/uc?id='+links_file)
 database_file = {}
 for col in links_df.columns:
     database_file[col] = links_df[col][0]
-localities_list = ["Andheri","Bandra","Bhandup","Bhuleshwar","Borivali","Breach Candy","Chembur","Colaba","Dadar","Dharavi","Fort","Ghatkopar","Goregaon","Juhu","Kandivali","Malabar Hill","Malad","Mulund","Pali Hill","Powai","Tardeo","Versova","Worli"]
+localities_list = [x for x in links_df.columns.to_list() if(x[:3]!="new" and x!="Resources" and x!="Login Info")]
 
 # map categories to values
 severity_map = {"Critical": 3, "Severe": 2, "Moderate": 1, "Mild": 0}

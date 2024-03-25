@@ -288,7 +288,7 @@ name_entry1.place(x=login_box2.winfo_screenwidth()*0.225, y=login_box2.winfo_scr
 name_label1=Label(login_box2, text="• Name", fg="white", bg="#05386B", font=("yu gothic ui", 11, "bold"))
 name_label1.place(x=login_box2.winfo_screenwidth()*0.225, y=login_box2.winfo_screenheight()*0.14)
 
-locality_options=["Andheri","Bandra","Bhandup","Bhuleshwar","Borivali","Breach Candy","Chembur","Colaba","Dadar","Dharavi","Fort","Ghatkopar","Goregaon","Juhu","Kandivali","Malabar Hill","Malad","Mulund","Pali Hill","Powai","Tardeo","Versova","Worli"]
+locality_options = [x for x in links_df.columns.to_list() if(x[:3]!="new" and x!="Resources" and x!="Login Info")]
 locality_variable = StringVar()
 locality_variable.set(locality_options[0])
 locality_menu = OptionMenu(login_box2, locality_variable, *locality_options)
