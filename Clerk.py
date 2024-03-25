@@ -2,9 +2,6 @@ import pandas as pd
 from tkinter import *
 from datetime import date
 
-def commit_changes(file_name,append_df):
-    append_df.to_csv(file_name,mode='a',header=False,index=False)
-
 def clerk_page(window,Database,locality):
     new_complaints_df = pd.read_csv('https://drive.google.com/uc?id='+Database[2]["new "+locality])
     prob_type = StringVar()
@@ -26,7 +23,8 @@ def clerk_page(window,Database,locality):
     street_entry = Entry(clerk_frame, textvariable=street_name, font=('Courier New Greek',15))
     street_entry.pack()
     Button(clerk_frame, text="Register", font=('Poppins bold', 18), command=register_entries).pack()
-    clerk_frame.pack()
+    clerk_frame.grid(row=0, column=0, sticky='nsew')
+    clerk_frame.tkraise()
 
     def exit():
         new_complaints_df.to_csv('temp.csv', index=False)

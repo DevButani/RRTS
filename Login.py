@@ -51,13 +51,13 @@ day_of_month = today.strftime("%d")
 year = today.strftime("%Y")
 
 def update_time1():
-    """Updates the label's text with the current time."""
+    #Updates the label's text with the current time.
     string_time = strftime('%H:%M:%S %p')
     clock_label1.config(text=string_time)
     window.after(1000, update_time1)
 
 def update_time2():
-    """Updates the label's text with the current time."""
+    #Updates the label's text with the current time.
     string_time = strftime('%H:%M:%S %p')
     clock_label2.config(text=string_time)
     window.after(1000, update_time2)
@@ -85,10 +85,6 @@ def show_page(frame):
 login_listbox1=Listbox(LoginPage, bg="white", width=window.winfo_screenwidth(), height=window.winfo_screenheight(), highlightthickness=0, borderwidth=0)
 login_listbox1.place(x=0,y=0)
 
-#d1e8e2
-#eee2dc
-#D9B08C
-#218d8f
 side_bar1=Frame(LoginPage, bg="#5cdb95", height=window.winfo_screenheight(), width=int(window.winfo_screenwidth()*0.2), highlightthickness=0, borderwidth=0)
 side_bar1.place(x=0,y=0)
 
@@ -192,8 +188,7 @@ def loginUser():
                 elif userType=="Admin":
                     Admin.admin_page(window,Database)
                 else:
-                    pass
-                    # open mayor page
+                    Mayor.mayor_page(window,Database)
         else:
             error_label1.config(text="Incorrect Email-Id or Password.\nTry Again.")
             password_entry1.delete(0,END)
@@ -213,10 +208,6 @@ partition_frame1.place(x=login_box1.winfo_screenwidth()*0.165, y=login_box1.winf
 login_listbox2=Listbox(SignupPage, bg="white", width=window.winfo_screenwidth(), height=window.winfo_screenheight(), highlightthickness=0, borderwidth=0)
 login_listbox2.place(x=0,y=0)
 
-#d1e8e2
-#eee2dc
-#D9B08C
-#218d8f
 side_bar2=Frame(SignupPage, bg="#5cdb95", height=window.winfo_screenheight(), width=int(window.winfo_screenwidth()*0.2), highlightthickness=0, borderwidth=0)
 side_bar2.place(x=0,y=0)
 
@@ -411,7 +402,7 @@ def passwordInactive():
     condition3.config(text='')
     condition2.config(text='')
     condition5.config(text='')
-    
+
 
 
 password_entry2.bind('<Enter>', lambda event: passwordActive())
