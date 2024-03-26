@@ -168,7 +168,7 @@ error_label1.place(x=login_box1.winfo_screenwidth()*0.225, y=login_box1.winfo_sc
 def loginUser():
     email=email_entry1.get()
     password=password_entry1.get()
-    global validUser
+    global validUser, login_info_df
     validUser=False
     idx=login_info_df[login_info_df['Email Id'] == email]
     if len(idx)>0:
@@ -189,6 +189,7 @@ def loginUser():
                     Supervisor.supervisor_page(window,Database,userLocality)
                 elif userType=="Admin":
                     Admin.admin_page(window,Database)
+                    login_info_df=pd.read_csv('temp.csv')
                 else:
                     Mayor.mayor_page(window,Database)
         else:
