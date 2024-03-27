@@ -82,32 +82,32 @@ def show_page(frame):
 
 #login page 
     
-login_listbox1=Listbox(LoginPage, bg="white", width=window.winfo_screenwidth(), height=window.winfo_screenheight(), highlightthickness=0, borderwidth=0)
+login_listbox1 = Listbox(LoginPage, bg="white", width=window.winfo_screenwidth(), height=window.winfo_screenheight(), highlightthickness=0, borderwidth=0)
 login_listbox1.place(x=0,y=0)
 
-side_bar1=Frame(LoginPage, bg="#5cdb95", height=window.winfo_screenheight(), width=int(window.winfo_screenwidth()*0.2), highlightthickness=0, borderwidth=0)
+side_bar1 = Frame(LoginPage, bg="#5cdb95", height=window.winfo_screenheight(), width=int(window.winfo_screenwidth()*0.2), highlightthickness=0, borderwidth=0)
 side_bar1.place(x=0,y=0)
 
-central_frame1=Frame(LoginPage, bg="white", height=window.winfo_screenheight(), width=window.winfo_screenwidth()*0.8)
+central_frame1 = Frame(LoginPage, bg="white", height=window.winfo_screenheight(), width=window.winfo_screenwidth()*0.8)
 central_frame1.place(x=window.winfo_screenwidth()*0.2, y=0)
 
 bg_img1 = Image.open('Images/bg0.png')
 bg_pic1 = ImageTk.PhotoImage(bg_img1)
 
-bg_label1=Label(side_bar1, image=bg_pic1, bg="black", width=window.winfo_screenwidth()*0.2, height=window.winfo_screenheight())
+bg_label1 = Label(side_bar1, image=bg_pic1, bg="black", width=window.winfo_screenwidth()*0.2, height=window.winfo_screenheight())
 bg_label1.image=bg_pic1
 bg_label1.place(x=0, y=0)
 
-login_box1=Listbox(central_frame1, bg="#05386B", width=int(window.winfo_screenwidth()*0.08), height=int(window.winfo_screenheight()*0.04), highlightthickness=2, borderwidth=0, highlightbackground="#05386B", highlightcolor="#05386B")
+login_box1 = Listbox(central_frame1, bg="#05386B", width=int(window.winfo_screenwidth()*0.08), height=int(window.winfo_screenheight()*0.04), highlightthickness=2, borderwidth=0, highlightbackground="#05386B", highlightcolor="#05386B")
 login_box1.place(x=central_frame1.winfo_screenwidth()*0.17, y=central_frame1.winfo_screenheight()*0.19)
 
-login_button1=Button(login_box1, command=lambda: show_page(LoginPage), fg="#5cdb95", bg="#05386B", text="Login", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box1.winfo_screenwidth()*0.0225))
+login_button1 = Button(login_box1, command=lambda: show_page(LoginPage), fg="#5cdb95", bg="#05386B", text="Login", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box1.winfo_screenwidth()*0.0225))
 login_button1.place(x=0, y=0)
 
-signup_button1=Button(login_box1, command=lambda: show_page(SignupPage), fg="#8ee4af", bg="black", text="Sign Up", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box1.winfo_screenwidth()*0.0225))
+signup_button1 = Button(login_box1, command=lambda: show_page(SignupPage), fg="#8ee4af", bg="black", text="Sign Up", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box1.winfo_screenwidth()*0.0225))
 signup_button1.place(x=login_box1.winfo_screenwidth()*0.235, y=0)
 
-welcome_label1=Label(login_box1, fg="#5cdb95", bg="#05386B", font=("yu gothic ui bold", 20), text="Welcome back!")
+welcome_label1 = Label(login_box1, fg="#5cdb95", bg="#05386B", font=("yu gothic ui bold", 20), text="Welcome back!")
 welcome_label1.place(x=login_box1.winfo_screenwidth()*0.15, y=login_box1.winfo_screenheight()*0.075)
 
 clock_icon1 = Image.open('Images/time.png')
@@ -126,7 +126,7 @@ date_icon_label1 = Label(login_box1, image=date_pic, bg='#05386B')
 date_icon_label1.image = date_pic
 date_icon_label1.place(x=login_box1.winfo_screenwidth()*0.025, y=login_box1.winfo_screenheight()*0.27)
 
-date_label1=Label(login_box1, text=day_of_week+", \n"+month+" "+day_of_month+", \n"+year, fg="white", bg="#05386B", font=('calibri', 15, 'bold'))
+date_label1 = Label(login_box1, text=day_of_week+", \n"+month+" "+day_of_month+", \n"+year, fg="white", bg="#05386B", font=('calibri', 15, 'bold'))
 date_label1.place(x=login_box1.winfo_screenwidth()*0.05, y=login_box1.winfo_screenheight()*0.275)
 
 email_icon1 = Image.open('Images/email1.png')
@@ -135,9 +135,9 @@ emailIcon_label1 = Label(login_box1, image=email_pic, bg='#05386B')
 emailIcon_label1.image = email_pic
 emailIcon_label1.place(x=login_box1.winfo_screenwidth()*0.195, y=login_box1.winfo_screenheight()*0.195)
 
-email_entry1=Entry(login_box1, fg="white", bg="#05386B", font=("yu gothic ui semibold", 12), highlightthickness=2, width=int(login_box1.winfo_screenwidth()*0.02), highlightcolor="white")
+email_entry1 = Entry(login_box1, fg="white", bg="#05386B", font=("yu gothic ui semibold", 12), highlightthickness=2, width=int(login_box1.winfo_screenwidth()*0.02), highlightcolor="white")
 email_entry1.place(x=login_box1.winfo_screenwidth()*0.225, y=login_box1.winfo_screenheight()*0.2)
-email_label1=Label(login_box1, text="• Email Id", fg="white", bg="#05386B", font=("yu gothic ui", 15, "bold"))
+email_label1 = Label(login_box1, text="• Email Id", fg="white", bg="#05386B", font=("yu gothic ui", 15, "bold"))
 email_label1.place(x=login_box1.winfo_screenwidth()*0.225, y=login_box1.winfo_screenheight()*0.16)
 
 password_icon1 = Image.open('Images/password1.png')
@@ -146,9 +146,9 @@ password_icon_label1 = Label(login_box1, image=password_pic, bg='#05386B')
 password_icon_label1.image = password_pic
 password_icon_label1.place(x=login_box1.winfo_screenwidth()*0.195, y=login_box1.winfo_screenheight()*0.32)
 
-password_entry1=Entry(login_box1, fg="white", bg="#05386B", font=("yu gothic ui semibold", 12), show='•', highlightthickness=2, width=int(login_box1.winfo_screenwidth()*0.02), highlightcolor="white")
+password_entry1 = Entry(login_box1, fg="white", bg="#05386B", font=("yu gothic ui semibold", 12), show='•', highlightthickness=2, width=int(login_box1.winfo_screenwidth()*0.02), highlightcolor="white")
 password_entry1.place(x=login_box1.winfo_screenwidth()*0.225, y=login_box1.winfo_screenheight()*0.325)
-password_label1=Label(login_box1, text="• Password", fg="white", bg="#05386B", font=("yu gothic ui", 15, "bold"))
+password_label1 = Label(login_box1, text="• Password", fg="white", bg="#05386B", font=("yu gothic ui", 15, "bold"))
 password_label1.place(x=login_box1.winfo_screenwidth()*0.225, y=login_box1.winfo_screenheight()*0.285)
 
 # function for show and hide password
@@ -158,7 +158,8 @@ def password_command():
     else:
         password_entry1.config(show='•')
 
-show_password = Checkbutton(login_box1, bg='#05386B', command=password_command, text='show password', fg="white", activebackground="#1f2833", activeforeground="#5cdb95", selectcolor="#05386B")
+show_pass_var = IntVar(value=0)
+show_password = Checkbutton(login_box1, bg='#05386B', command=password_command, text='show password', variable=show_pass_var, onvalue=1, offvalue=0, fg="white", activebackground="#1f2833", activeforeground="#5cdb95", selectcolor="#05386B")
 show_password.place(x=login_box1.winfo_screenwidth()*0.225, y=login_box1.winfo_screenheight()*0.37)
 
 error_label1=Label(login_box1, text="", fg="red", bg="#05386B", font=("yu gothic ui", 11, 'bold'))
@@ -166,6 +167,7 @@ error_label1.place(x=login_box1.winfo_screenwidth()*0.225, y=login_box1.winfo_sc
 
 # On pressing Login
 def loginUser():
+    error_label1.config(text="")
     email=email_entry1.get()
     password=password_entry1.get()
     global validUser, login_info_df
@@ -183,6 +185,8 @@ def loginUser():
                 userLocality=login_info_df['Locality'][ind]
                 email_entry1.delete(0, END)
                 password_entry1.delete(0, END)
+                show_pass_var.set(0)
+                password_entry1.config(show='•')
                 if userType=="Clerk":
                     Clerk.clerk_page(window,Database,userLocality)
                 elif userType=="Supervisor":
@@ -195,10 +199,14 @@ def loginUser():
         else:
             error_label1.config(text="Incorrect Email-Id or Password.\nTry Again.")
             password_entry1.delete(0,END)
+            show_pass_var.set(0)
+            password_entry1.config(show='•')
     else:
         error_label1.config(text='No Acount linked with given Email Id.\nPlease Sign Up.')
         email_entry1.delete(0, END)
         password_entry1.delete(0, END)
+        show_pass_var.set(0)
+        password_entry1.config(show='•')
 
 login_button_down=Button(login_box1, text="Login", bg="white", fg="#05386B", font=("yu gothic ui bold", 17), cursor="hand2", activebackground="white", activeforeground="#05386B", borderwidth=0, width=int(login_box1.winfo_screenwidth()*0.01), command=loginUser)
 login_button_down.place(x=login_box1.winfo_screenwidth()*0.25, y=login_box1.winfo_screenheight()*0.5)
@@ -218,7 +226,6 @@ central_frame2=Frame(SignupPage, bg="white", height=window.winfo_screenheight(),
 central_frame2.place(x=window.winfo_screenwidth()*0.2, y=0)
 
 bg_img2 = Image.open('Images/bg0.png')
-# bg_img1.resize((side_bar1.winfo_width(), side_bar1.winfo_height()))
 bg_pic2 = ImageTk.PhotoImage(bg_img2)
 
 bg_label2=Label(side_bar2, image=bg_pic2, bg="black", width=window.winfo_screenwidth()*0.2, height=window.winfo_screenheight())
@@ -233,9 +240,6 @@ login_button2.place(x=0, y=0)
 
 signup_button2=Button(login_box2, command=lambda: show_page(SignupPage), fg="#5cdb95", bg="#05386B", text="Sign Up", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box2.winfo_screenwidth()*0.0225))
 signup_button2.place(x=login_box2.winfo_screenwidth()*0.235, y=0)
-
-# welcome_label2=Label(login_box2, fg="#5cdb95", bg="#05386B", font=("yu gothic ui bold", 20), text="Hello, new user!!")
-# welcome_label2.place(x=login_box2.winfo_screenwidth()*0.15, y=login_box2.winfo_screenheight()*0.075)
 
 clock_pic = ImageTk.PhotoImage(clock_icon1)
 clock_icon_label2 = Label(login_box2, image=clock_pic, bg='#05386B')
@@ -269,9 +273,10 @@ condition4=Label(login_box2, text='', fg="red", bg='#05386b', font=("yu gothic u
 condition4.place(x=login_box2.winfo_screenwidth()*0.015, y=login_box2.winfo_screenheight()*0.4)
 condition5=Label(login_box2, text='', fg="red", bg='#05386b', font=("yu gothic ui", 11, 'bold'))
 condition5.place(x=login_box2.winfo_screenwidth()*0.015, y=login_box2.winfo_screenheight()*0.425)
+condition6=Label(login_box2, text='', fg="red", bg='#05386b', font=("yu gothic ui", 11, 'bold'))
+condition6.place(x=login_box2.winfo_screenwidth()*0.015, y=login_box2.winfo_screenheight()*0.45)
 
-
-#type, name, locality, password,emailid, confirm pass
+#type, name, locality, password, email id, confirm pass
 # Type
 type_options=["Clerk", "Supervisor"]
 type_variable = StringVar()
@@ -308,6 +313,7 @@ email_label2=Label(login_box2, text="• Email Id", fg="white", bg="#05386B", fo
 email_label2.place(x=login_box2.winfo_screenwidth()*0.225, y=login_box2.winfo_screenheight()*0.28)
 
 # UserIdChecker
+userIdValid=False
 
 def userIdCheck(*args):
     str2=emailId2.get()
@@ -319,14 +325,21 @@ def userIdCheck(*args):
         condition1.config(text='Invalid Email Id', fg="red")
         userIdValid=False
     if userIdValid:
-        if str2 in login_info_df['Email Id']:
-            condition1.config(text='Email Id Already Exists', fg="red")
+        if str2 in login_info_df['Email Id'].to_list():
+            condition1.config(text='Email Id Already In Use', fg="red")
             userIdValid=False
         else:
             condition1.config(text='')
 
 
 def userIdActive():
+    head.config(text='')
+    condition1.config(text='')
+    condition2.config(text='')
+    condition3.config(text='')
+    condition4.config(text='')
+    condition5.config(text='')
+    condition6.config(text='')
     emailId2.trace('w', userIdCheck)
 
 def userIdInactive():
@@ -346,66 +359,75 @@ password_label2.place(x=login_box2.winfo_screenwidth()*0.225, y=login_box2.winfo
 
 
 #password checker
-req=list((False, False, False, False, False, True))
+req=[False, False, False, False, False, True]
 
 def passwordCheck(*args):
+    global req
     str1=password2.get()
     head.config(text='• Password must contain:')
-    condition1.config(text='• 8-12 characters')
+    condition1.config(text='• More than 7 characters')
     condition4.config(text='• At least one number')
     condition3.config(text='• At least one lowercase letter')
     condition2.config(text='• At least one uppercase letter')
     condition5.config(text='• At least one special character')
+    condition6.config(text='• No blank spaces')
     condition1.config(fg='red')
     condition2.config(fg='red')
     condition3.config(fg='red')
     condition4.config(fg='red')
     condition5.config(fg='red')
-    specialCharacter=list(('!','@','#','$','%','&','*'))
+    condition6.config(fg='green')
+    specialCharacter=list(('~','!','@','#','$','%','^','&','*','(',')','-','_','/'))
+    req=[False, False, False, False, False, True]
+    if len(str1)>7:
+        condition1.config(fg='green')            
+        req[0]=True
     for i in range(len(str1)):
-        if(i>=7):
-            condition1.config(fg='green')
-            
-            req[0]=True
-        if(i>11):
-            condition1.config(fg='red')
-
-            req[0]=False
-        if(str1[i]>='0' and str1[i]<='9'):
-            condition4.config(fg='green')
-            
+        if str1[i]>='0' and str1[i]<='9':
+            condition4.config(fg='green')            
             req[3]=True
-        elif(str1[i]>='a' and str1[i]<='z'):
-            condition3.config(fg='green')
-            
+
+        elif str1[i]>='a' and str1[i]<='z':
+            condition3.config(fg='green')            
             req[2]=True
-        elif(str1[i]>='A' and str1[i]<='Z'):
-            condition2.config(fg='green')
-            
+
+        elif str1[i]>='A' and str1[i]<='Z':
+            condition2.config(fg='green')            
             req[1]=True
+
         elif str1[i] in specialCharacter:
-            condition5.config(fg='green')
-            
+            condition5.config(fg='green')            
             req[4]=True
-        req[5]=True
-        for j in range(5):
+        
+        else:
+            req[0]=False
+            if str1[i]==' ': 
+                condition6.config(fg='red')
+
+    for j in range(5):
             if(req[j]==False):
-                req[j]=False
+                req[5]=False
                 break
 
-    
 
 def passwordActive():
+    head.config(text='')
+    condition1.config(text='')
+    condition2.config(text='')
+    condition3.config(text='')
+    condition4.config(text='')
+    condition5.config(text='')
+    condition6.config(text='')
     password2.trace('w', passwordCheck)
 
 def passwordInactive():
     head.config(text='')
     condition1.config(text='')
-    condition4.config(text='')
-    condition3.config(text='')
     condition2.config(text='')
+    condition3.config(text='')
+    condition4.config(text='')
     condition5.config(text='')
-
+    condition6.config(text='')
 
 
 password_entry2.bind('<Enter>', lambda event: passwordActive())
@@ -418,29 +440,33 @@ def password_command2():
     else:
         password_entry2.config(show='•')
 
-show_password2= Checkbutton(login_box2, bg='#05386B', command=password_command2, text='show password', fg="white", activebackground="#1f2833", activeforeground="#5cdb95", selectcolor="#05386B")
+show_pass2_var = IntVar(value=0)
+show_password2 = Checkbutton(login_box2, bg='#05386B', command=password_command2, text='show password', variable=show_pass2_var, onvalue=1, offvalue=0, fg="white", activebackground="#1f2833", activeforeground="#5cdb95", selectcolor="#05386B")
 show_password2.place(x=login_box2.winfo_screenwidth()*0.225, y=login_box2.winfo_screenheight()*0.42)
 
-confirm_password=StringVar()
+confirm_password = StringVar()
 
-confirm_password_entry2=Entry(login_box2, text=(confirm_password), fg="white", bg="#05386B", font=("yu gothic ui semibold", 12), show='•', highlightthickness=2, width=int(login_box2.winfo_screenwidth()*0.02), highlightcolor="white")
+confirm_password_entry2 = Entry(login_box2, text=(confirm_password), fg="white", bg="#05386B", font=("yu gothic ui semibold", 12), show='•', highlightthickness=2, width=int(login_box2.winfo_screenwidth()*0.02), highlightcolor="white")
 confirm_password_entry2.place(x=login_box2.winfo_screenwidth()*0.225, y=login_box2.winfo_screenheight()*0.48)
-confirm_password_label2=Label(login_box2, text="• Password", fg="white", bg="#05386B", font=("yu gothic ui", 11, "bold"))
+confirm_password_label2 = Label(login_box2, text="• Confirm Password", fg="white", bg="#05386B", font=("yu gothic ui", 11, "bold"))
 confirm_password_label2.place(x=login_box2.winfo_screenwidth()*0.225, y=login_box2.winfo_screenheight()*0.45)
 
 def confirmPasswordCheck(*args):
     condition1.config(text='Confirm Password must be \nsame as Password')
     condition1.config(fg='red')
-    str3=confirm_password.get()
-    global pEqual
-    if(str3==password1):
+    if confirm_password.get()==password1:
         condition1.config(fg='green')
-        pEqual=True
     else:
         condition1.config(fg='red')
-        pEqual=False
 
 def confirmPasswordActive():
+    head.config(text='')
+    condition1.config(text='')
+    condition2.config(text='')
+    condition3.config(text='')
+    condition4.config(text='')
+    condition5.config(text='')
+    condition6.config(text='')
     global password1
     password1=password2.get()
     confirm_password.trace('w', confirmPasswordCheck)
@@ -448,11 +474,11 @@ def confirmPasswordActive():
 def confirmPasswordInactive():
     head.config(text='')
     condition1.config(text='')
-    condition4.config(text='')
-    condition3.config(text='')
     condition2.config(text='')
+    condition3.config(text='')
+    condition4.config(text='')
     condition5.config(text='')
-    
+    condition6.config(text='')
 
 
 confirm_password_entry2.bind('<Enter>', lambda event: confirmPasswordActive())
@@ -465,11 +491,12 @@ def confirm_password_command2():
     else:
         confirm_password_entry2.config(show='•')
 
-show_confirm_password2= Checkbutton(login_box2, bg='#05386B', command=confirm_password_command2, text='show password', fg="white", activebackground="#1f2833", activeforeground="#5cdb95", selectcolor="#05386B")
+show_conf_pass2_var = IntVar(value=0)
+show_confirm_password2 = Checkbutton(login_box2, bg='#05386B', command=confirm_password_command2, text='show password', variable=show_conf_pass2_var, onvalue=1, offvalue=0, fg="white", activebackground="#1f2833", activeforeground="#5cdb95", selectcolor="#05386B")
 show_confirm_password2.place(x=login_box2.winfo_screenwidth()*0.225, y=login_box2.winfo_screenheight()*0.52)
 
 def signUp():
-    global login_info_df
+    global login_info_df, userIdValid, req
     head.config(text="")
     condition1.config(text="")
     condition2.config(text="")
@@ -479,11 +506,14 @@ def signUp():
         condition1.config(text="• Invalid Email Id.", fg="red")
     if not req[5]:
         head.config(text="Error")
-        condition2.config(text="• Password not satisfying\n all conditions.", fg="red")
-    if not pEqual:
+        condition2.config(text="• Invalid Password.", fg="red")
+    if not name_entry1.get().replace(" ",""):
         head.config(text="Error")
-        condition3.config(text="• Confirm password not \nsame as Password.", fg="red")
-    if userIdValid and req[5] and pEqual:
+        condition3.config(text="• Please provide a name.", fg="red")
+    if confirm_password.get()!=password1:
+        head.config(text="Error")
+        condition4.config(text="• Confirm password not \nsame as Password.", fg="red")
+    if userIdValid and req[5] and confirm_password.get()==password1 and name_entry1.get().replace(" ",""):
         temp_dict=[{'Type': type_variable.get(), 'Name': name_entry1.get(), 'Locality': locality_variable.get(), 'Email Id': emailId2.get(), 'Password': password2.get(), 'Authorized': 'N'}]
         temp_df=pd.DataFrame(temp_dict)
         login_info_df=pd.concat([login_info_df,temp_df], ignore_index=True)
@@ -495,20 +525,25 @@ def signUp():
         type_variable.set(type_options[0])
         email_entry2.delete(0,END)
         password_entry2.delete(0,END)
+        show_pass2_var.set(0)
+        password_entry2.config(show='•')
         locality_variable.set(locality_options[0])
         confirm_password_entry2.delete(0,END)
+        show_conf_pass2_var.set(0)
+        confirm_password_entry2.config(show='•')
         head.config(text="Account details sent\nto Admin for\nAuthorization.\nPlease wait.")
         condition1.config(text="")
         condition2.config(text="")
         condition3.config(text="")
         condition4.config(text="")
         condition5.config(text="")
+        condition6.config(text="")
         
 
 
 signup_button_down=Button(login_box2, text="Sign Up", bg="white", fg="#05386B", font=("yu gothic ui bold", 17), cursor="hand2", activebackground="white", activeforeground="#05386B", borderwidth=0, width=int(login_box2.winfo_screenwidth()*0.01), command=signUp)
 signup_button_down.place(x=login_box2.winfo_screenwidth()*0.25, y=login_box2.winfo_screenheight()*0.56)
 
-show_page(SignupPage)
+show_page(LoginPage)
 
 window.mainloop()
