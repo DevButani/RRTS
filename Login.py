@@ -220,7 +220,7 @@ def loginUser():
                 Admin.admin_page(window,Database)
                 login_info_df=pd.read_csv('temp.csv')
             else:
-                Mayor.mayor_page(window,Database)
+                Mayor.mayor_page(window,Database,locality_options)
     else:
         error_label1.config(text="Incorrect Email-Id or Password.")
 

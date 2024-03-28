@@ -21,6 +21,9 @@ def admin_page(window,Database):
     display_frame=Frame(admin_frame)
     authorization_frame=Frame(admin_frame)
 
+    resources_updated=False
+    login_info_updated=False
+
     rsrc_not_packed=True
     auth_not_packed=True
 
@@ -31,16 +34,18 @@ def admin_page(window,Database):
         nonlocal rsrc_not_packed
     
         resource_type=StringVar()
-        resource_type.set("--")
+        resource_type.set("[select]")
         resource_name=StringVar()
-        resource_name.set("--")
+        resource_name.set("[select]")
         resource_count=IntVar()
         resource_count.set(0)
 
         def register_entries():
+            nonlocal resources_updated
+            resources_updated = True
             resources_df.iloc[((resources_df['Resource Type']==resource_type.get()) & (resources_df['Name']==resource_name.get())),2]=resource_count.get()
-            resource_type.set("--")
-            resource_name.set("--")
+            resource_type.set("[select]")
+            resource_name.set("[select]")
             resource_count.set(0)
 
         def set_resource_names(type):
@@ -48,6 +53,7 @@ def admin_page(window,Database):
             menu.delete(0,"end")
             for string in name_list[type]:
                 menu.add_command(label=string, command=lambda value=string: resource_name.set(value))
+            resource_name.set("[select]")
 
         if rsrc_not_packed:
             Label(resource_frame,text="Choose Resource ",font=('Courier New Greek',18)).pack(pady=20)
@@ -57,14 +63,13 @@ def admin_page(window,Database):
             resource_type_menu.pack(anchor=CENTER,padx=70)
 
             name_list={
-                "--": ["--"],
                 "Raw Materials": ["Asphalt", "Bitumen", "Concrete"],
                 "Machines": ["Bulldozer", "Road Roller", "Concrete Mixer", "Jackhammer"],
                 "Personnel": ["Engineer", "Worker", "Machine Operator"]
             }
 
             Label(resource_frame,text="Choose Type ",font=('Courier New Greek',18)).pack(pady=20)
-            resource_name_menu=OptionMenu(resource_frame,resource_name,"--")
+            resource_name_menu=OptionMenu(resource_frame,resource_name,"[select]")
             resource_name_menu.config(font=('Courier New Greek',15),width=18)
             resource_name_menu.pack(anchor=CENTER,padx=70)
 
@@ -140,7 +145,8 @@ def admin_page(window,Database):
 
         records = []
         def change_status(row):
-            nonlocal unauthorized_df
+            nonlocal unauthorized_df, login_info_updated
+            login_info_updated = True
             if unauthorized_df['Authorized'][row]=="Y": unauthorized_df.at[row, 'Authorized'] = "N"
             elif unauthorized_df['Authorized'][row]=="N": unauthorized_df.at[row, 'Authorized'] = "Y"
             records[row].config(text=unauthorized_df['Locality'][row] + " | " + unauthorized_df['Type'][row] + " | " + unauthorized_df['Name'][row] + " | " + unauthorized_df['Email Id'][row] + " | Status: " + unauthorized_df['Authorized'][row])
@@ -170,16 +176,18 @@ def admin_page(window,Database):
 
     def exit():
         nonlocal login_info_df, unauthorized_df
-        resources_df.to_csv('temp.csv', index=False)
-        file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2]["Resources"]})
-        file_obj.SetContentFile(filename='temp.csv')
-        file_obj.Upload()
+        if resources_updated:
+            resources_df.to_csv('temp.csv', index=False)
+            file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2]["Resources"]})
+            file_obj.SetContentFile(filename='temp.csv')
+            file_obj.Upload()
 
         login_info_df = pd.concat([login_info_df,unauthorized_df], ignore_index=True)
         login_info_df.to_csv('temp.csv', index=False)
-        file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2]["Login Info"]})
-        file_obj.SetContentFile(filename='temp.csv')
-        file_obj.Upload()
+        if login_info_updated:
+            file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2]["Login Info"]})
+            file_obj.SetContentFile(filename='temp.csv')
+            file_obj.Upload()
         
         admin_frame.destroy()
 
