@@ -121,7 +121,7 @@ def switch_to_login():
     condition6.config(text="")
     show_page(LoginPage)
 
-login_button1 = Button(login_box1, command=switch_to_login, fg="#5cdb95", bg="#05386B", text="Login", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box1.winfo_screenwidth()*0.0225))
+login_button1 = Button(login_box1, command=switch_to_login, fg="#5cdb95", bg="#05386B", text="Log In", font=("yu gothic ui bold", 17), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box1.winfo_screenwidth()*0.0185))
 login_button1.place(x=0, y=0)
 
 def switch_to_signup():
@@ -132,11 +132,11 @@ def switch_to_signup():
     password_entry1.config(show='•')
     show_page(SignupPage)
 
-signup_button1 = Button(login_box1, command=switch_to_signup, fg="#8ee4af", bg="black", text="Sign Up", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box1.winfo_screenwidth()*0.0225))
+signup_button1 = Button(login_box1, command=switch_to_signup, fg="#8ee4af", bg="black", text="Sign Up", font=("yu gothic ui bold", 17), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box1.winfo_screenwidth()*0.0185))
 signup_button1.place(x=login_box1.winfo_screenwidth()*0.235, y=0)
 
-welcome_label1 = Label(login_box1, fg="#5cdb95", bg="#05386B", font=("yu gothic ui bold", 20), text="Welcome back!")
-welcome_label1.place(x=login_box1.winfo_screenwidth()*0.15, y=login_box1.winfo_screenheight()*0.075)
+welcome_label1 = Label(login_box1, fg="#5cdb95", bg="#05386B", font=("yu gothic ui bold", 30), text="Welcome")
+welcome_label1.place(x=login_box1.winfo_screenwidth()*0.17, y=login_box1.winfo_screenheight()*0.069)
 
 clock_icon1 = Image.open('Images/time.png')
 clock_pic = ImageTk.PhotoImage(clock_icon1)
@@ -154,8 +154,8 @@ date_icon_label1 = Label(login_box1, image=date_pic, bg='#05386B')
 date_icon_label1.image = date_pic
 date_icon_label1.place(x=login_box1.winfo_screenwidth()*0.025, y=login_box1.winfo_screenheight()*0.27)
 
-date_label1 = Label(login_box1, text=day_of_week+", \n"+month+" "+day_of_month+", \n"+year, fg="white", bg="#05386B", font=('calibri', 15, 'bold'))
-date_label1.place(x=login_box1.winfo_screenwidth()*0.05, y=login_box1.winfo_screenheight()*0.275)
+date_label1 = Label(login_box1, text=day_of_week+" \n"+month+" "+day_of_month+" \n"+year, fg="white", bg="#05386B", font=('calibri', 15, 'bold'))
+date_label1.place(x=login_box1.winfo_screenwidth()*0.055, y=login_box1.winfo_screenheight()*0.275)
 
 email_icon1 = Image.open('Images/email1.png')
 email_pic = ImageTk.PhotoImage(email_icon1)
@@ -198,45 +198,34 @@ def loginUser():
     error_label1.config(text="")
     email=email_entry1.get().lower()
     password=password_entry1.get()
-    global login_info_df
+    global login_info_df, ind
     idx=login_info_df[login_info_df['Email Id'] == email]
-    if len(idx)>0:
-        global ind
-        ind=idx.index[0]
-        if password==login_info_df['Password'][ind]:
-            if login_info_df['Authorized'][ind]=='N':
-                error_label1.config(text="Authorization Pending.\nPlease wait.")
-            else:
-                userType=login_info_df['Type'][ind]
-                userLocality=login_info_df['Locality'][ind]
-                email_entry1.delete(0, END)
-                password_entry1.delete(0, END)
-                show_pass_var.set(0)
-                password_entry1.config(show='•')
-                if userType=="Clerk":
-                    Clerk.clerk_page(window,Database,userLocality)
-                elif userType=="Supervisor":
-                    Supervisor.supervisor_page(window,Database,userLocality)
-                elif userType=="Admin":
-                    login_info_df.to_csv('temp.csv', index=False)
-                    Admin.admin_page(window,Database)
-                    login_info_df=pd.read_csv('temp.csv')
-                else:
-                    Mayor.mayor_page(window,Database)
+    ind=idx.index[0]
+    if len(idx)>0 and password==login_info_df['Password'][ind]:
+        if login_info_df['Authorized'][ind]=='N':
+            error_label1.config(text="Authorization Pending.\nPlease wait.")
         else:
-            error_label1.config(text="Incorrect Email-Id or Password.\nTry Again.")
-            password_entry1.delete(0,END)
+            userType=login_info_df['Type'][ind]
+            userLocality=login_info_df['Locality'][ind]
+            email_entry1.delete(0, END)
+            password_entry1.delete(0, END)
             show_pass_var.set(0)
             password_entry1.config(show='•')
+            if userType=="Clerk":
+                Clerk.clerk_page(window,Database,userLocality)
+            elif userType=="Supervisor":
+                Supervisor.supervisor_page(window,Database,userLocality)
+            elif userType=="Admin":
+                login_info_df.to_csv('temp.csv', index=False)
+                Admin.admin_page(window,Database)
+                login_info_df=pd.read_csv('temp.csv')
+            else:
+                Mayor.mayor_page(window,Database)
     else:
-        error_label1.config(text='No Acount linked with given Email Id.\nPlease Sign Up.')
-        email_entry1.delete(0, END)
-        password_entry1.delete(0, END)
-        show_pass_var.set(0)
-        password_entry1.config(show='•')
+        error_label1.config(text="Incorrect Email-Id or Password.")
 
-login_button_down=Button(login_box1, text="Login", bg="white", fg="#05386B", font=("yu gothic ui bold", 17), cursor="hand2", activebackground="white", activeforeground="#05386B", borderwidth=0, width=int(login_box1.winfo_screenwidth()*0.01), command=loginUser)
-login_button_down.place(x=login_box1.winfo_screenwidth()*0.25, y=login_box1.winfo_screenheight()*0.5)
+login_button_down=Button(login_box1, text="Log In", bg="white", fg="#05386B", font=("yu gothic ui bold", 17), cursor="hand2", activebackground="white", activeforeground="#05386B", borderwidth=0, width=int(login_box1.winfo_screenwidth()*0.01), command=loginUser)
+login_button_down.place(x=login_box1.winfo_screenwidth()*0.245, y=login_box1.winfo_screenheight()*0.45)
 
 partition_frame1=Frame(login_box1, bg="white", width=int(login_box1.winfo_screenwidth()*0.0025), height=int(login_box1.winfo_screenheight()*0.35))
 partition_frame1.place(x=login_box1.winfo_screenwidth()*0.165, y=login_box1.winfo_screenheight()*0.15)
@@ -262,10 +251,10 @@ bg_label2.place(x=0, y=0)
 login_box2=Listbox(central_frame2, bg="#05386B", width=int(window.winfo_screenwidth()*0.08), height=int(window.winfo_screenheight()*0.04), highlightthickness=2, borderwidth=0, highlightbackground="#05386B", highlightcolor="#05386B")
 login_box2.place(x=central_frame2.winfo_screenwidth()*0.17, y=central_frame2.winfo_screenheight()*0.19)
 
-login_button2=Button(login_box2, command=switch_to_login, fg="#8ee4af", bg="black", text="Login", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box2.winfo_screenwidth()*0.0225))
+login_button2=Button(login_box2, command=switch_to_login, fg="#8ee4af", bg="black", text="Log In", font=("yu gothic ui bold", 17), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box2.winfo_screenwidth()*0.0185))
 login_button2.place(x=0, y=0)
 
-signup_button2=Button(login_box2, command=switch_to_signup, fg="#5cdb95", bg="#05386B", text="Sign Up", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box2.winfo_screenwidth()*0.0225))
+signup_button2=Button(login_box2, command=switch_to_signup, fg="#5cdb95", bg="#05386B", text="Sign Up", font=("yu gothic ui bold", 17), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box2.winfo_screenwidth()*0.0185))
 signup_button2.place(x=login_box2.winfo_screenwidth()*0.235, y=0)
 
 clock_pic = ImageTk.PhotoImage(clock_icon1)
@@ -282,8 +271,8 @@ date_icon_label2 = Label(login_box2, image=date_pic, bg='#05386B')
 date_icon_label2.image = date_pic
 date_icon_label2.place(x=login_box2.winfo_screenwidth()*0.025, y=login_box2.winfo_screenheight()*0.17)
 
-date_label2=Label(login_box2, text=day_of_week+", \n"+month+" "+day_of_month+", \n"+year, fg="white", bg="#05386B", font=('calibri', 15, 'bold'))
-date_label2.place(x=login_box2.winfo_screenwidth()*0.05, y=login_box2.winfo_screenheight()*0.175)
+date_label2=Label(login_box2, text=day_of_week+" \n"+month+" "+day_of_month+" \n"+year, fg="white", bg="#05386B", font=('calibri', 15, 'bold'))
+date_label2.place(x=login_box2.winfo_screenwidth()*0.055, y=login_box2.winfo_screenheight()*0.175)
 
 partition_frame2=Frame(login_box2, bg="white", width=int(login_box2.winfo_screenwidth()*0.0025), height=int(login_box2.winfo_screenheight()*0.5))
 partition_frame2.place(x=login_box2.winfo_screenwidth()*0.165, y=login_box2.winfo_screenheight()*0.075)
@@ -386,7 +375,7 @@ password_label2.place(x=login_box2.winfo_screenwidth()*0.225, y=login_box2.winfo
 
 
 #password checker
-req=[False, False, False, False, False, True]
+req=[False, False, False, False, False, False]
 
 def passwordCheck(*args):
     global req
@@ -536,10 +525,10 @@ def signUp():
         condition2.config(text="• Invalid Password.", fg="red")
     if not name_entry1.get().replace(" ",""):
         head.config(text="Error")
-        condition3.config(text="• Please provide a name.", fg="red")
+        condition3.config(text="• Please provide a Name.", fg="red")
     if confirm_password.get()!=password1:
         head.config(text="Error")
-        condition4.config(text="• Confirm password not \nsame as Password.", fg="red")
+        condition4.config(text="• Confirm Password not \nsame as Password.", fg="red")
     if userIdValid and req[5] and confirm_password.get()==password1 and name_entry1.get().replace(" ",""):
         temp_dict=[{'Type': type_variable.get(), 'Name': name_entry1.get(), 'Locality': locality_variable.get(), 'Email Id': emailId2.get().lower(), 'Password': password2.get(), 'Authorized': 'N'}]
         temp_df=pd.DataFrame(temp_dict)
