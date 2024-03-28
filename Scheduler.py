@@ -24,9 +24,9 @@ database_folder = '1H5CUI-DRExlAleJwr0P_jlwh5c_GUJem'
 links_file = '1i-PIzY2z8a0V7QKijE5zBI4bqPng749O'
 links_df = pd.read_csv('https://drive.google.com/uc?id='+links_file)
 database_file = {}
-for col in links_df.columns:
-    database_file[col] = links_df[col][0]
-localities_list = [x for x in links_df.columns.to_list() if(x[:3]!="new" and x!="Resources" and x!="Login Info")]
+for i in range(len(links_df.index)):
+    database_file[links_df['File'][i]] = links_df['Link'][i]
+localities_list = [x for x in links_df['File'].to_list() if(x[:3]!="new" and x!="Resources" and x!="Login Info")]
 
 # map categories to values
 severity_map = {"Critical": 3, "Severe": 2, "Moderate": 1, "Mild": 0}
