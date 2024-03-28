@@ -9,7 +9,7 @@ def admin_page(window,Database):
     admin_frame.grid(row=0, column=0, sticky='nsew')
 
     resources_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2]["Resources"])
-    login_info_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2]["Login Info"])
+    login_info_df=pd.read_csv('temp.csv')
     unauthorized_df=login_info_df[login_info_df['Authorized']=='N']
     authorized_df=login_info_df[login_info_df['Authorized']=='Y']
     login_info_df.drop(login_info_df[login_info_df['Authorized']!='-'].index, inplace=True)

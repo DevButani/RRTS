@@ -101,10 +101,38 @@ bg_label1.place(x=0, y=0)
 login_box1 = Listbox(central_frame1, bg="#05386B", width=int(window.winfo_screenwidth()*0.08), height=int(window.winfo_screenheight()*0.04), highlightthickness=2, borderwidth=0, highlightbackground="#05386B", highlightcolor="#05386B")
 login_box1.place(x=central_frame1.winfo_screenwidth()*0.17, y=central_frame1.winfo_screenheight()*0.19)
 
-login_button1 = Button(login_box1, command=lambda: show_page(LoginPage), fg="#5cdb95", bg="#05386B", text="Login", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box1.winfo_screenwidth()*0.0225))
+def switch_to_login():
+    name_entry1.delete(0,END)
+    type_variable.set(type_options[0])
+    email_entry2.delete(0,END)
+    password_entry2.delete(0,END)
+    show_pass2_var.set(0)
+    password_entry2.config(show='•')
+    locality_variable.set(locality_options[0])
+    confirm_password_entry2.delete(0,END)
+    show_conf_pass2_var.set(0)
+    confirm_password_entry2.config(show='•')
+    head.config(text="")
+    condition1.config(text="")
+    condition2.config(text="")
+    condition3.config(text="")
+    condition4.config(text="")
+    condition5.config(text="")
+    condition6.config(text="")
+    show_page(LoginPage)
+
+login_button1 = Button(login_box1, command=switch_to_login, fg="#5cdb95", bg="#05386B", text="Login", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box1.winfo_screenwidth()*0.0225))
 login_button1.place(x=0, y=0)
 
-signup_button1 = Button(login_box1, command=lambda: show_page(SignupPage), fg="#8ee4af", bg="black", text="Sign Up", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box1.winfo_screenwidth()*0.0225))
+def switch_to_signup():
+    error_label1.config(text="")
+    email_entry1.delete(0, END)
+    password_entry1.delete(0, END)
+    show_pass_var.set(0)
+    password_entry1.config(show='•')
+    show_page(SignupPage)
+
+signup_button1 = Button(login_box1, command=switch_to_signup, fg="#8ee4af", bg="black", text="Sign Up", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box1.winfo_screenwidth()*0.0225))
 signup_button1.place(x=login_box1.winfo_screenwidth()*0.235, y=0)
 
 welcome_label1 = Label(login_box1, fg="#5cdb95", bg="#05386B", font=("yu gothic ui bold", 20), text="Welcome back!")
@@ -168,13 +196,11 @@ error_label1.place(x=login_box1.winfo_screenwidth()*0.225, y=login_box1.winfo_sc
 # On pressing Login
 def loginUser():
     error_label1.config(text="")
-    email=email_entry1.get()
+    email=email_entry1.get().lower()
     password=password_entry1.get()
-    global validUser, login_info_df
-    validUser=False
+    global login_info_df
     idx=login_info_df[login_info_df['Email Id'] == email]
     if len(idx)>0:
-        validUser=True
         global ind
         ind=idx.index[0]
         if password==login_info_df['Password'][ind]:
@@ -192,6 +218,7 @@ def loginUser():
                 elif userType=="Supervisor":
                     Supervisor.supervisor_page(window,Database,userLocality)
                 elif userType=="Admin":
+                    login_info_df.to_csv('temp.csv', index=False)
                     Admin.admin_page(window,Database)
                     login_info_df=pd.read_csv('temp.csv')
                 else:
@@ -235,10 +262,10 @@ bg_label2.place(x=0, y=0)
 login_box2=Listbox(central_frame2, bg="#05386B", width=int(window.winfo_screenwidth()*0.08), height=int(window.winfo_screenheight()*0.04), highlightthickness=2, borderwidth=0, highlightbackground="#05386B", highlightcolor="#05386B")
 login_box2.place(x=central_frame2.winfo_screenwidth()*0.17, y=central_frame2.winfo_screenheight()*0.19)
 
-login_button2=Button(login_box2, command=lambda: show_page(LoginPage), fg="#8ee4af", bg="black", text="Login", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box2.winfo_screenwidth()*0.0225))
+login_button2=Button(login_box2, command=switch_to_login, fg="#8ee4af", bg="black", text="Login", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box2.winfo_screenwidth()*0.0225))
 login_button2.place(x=0, y=0)
 
-signup_button2=Button(login_box2, command=lambda: show_page(SignupPage), fg="#5cdb95", bg="#05386B", text="Sign Up", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box2.winfo_screenwidth()*0.0225))
+signup_button2=Button(login_box2, command=switch_to_signup, fg="#5cdb95", bg="#05386B", text="Sign Up", font=("yu gothic ui bold", 15), borderwidth=0, cursor='hand2', activebackground="#05386B", activeforeground="#5cdb95", width=int(login_box2.winfo_screenwidth()*0.0225))
 signup_button2.place(x=login_box2.winfo_screenwidth()*0.235, y=0)
 
 clock_pic = ImageTk.PhotoImage(clock_icon1)
@@ -319,7 +346,7 @@ def userIdCheck(*args):
     str2=emailId2.get()
     condition1.config(text='')
     global userIdValid
-    if re.match(r"^[a-zA-Z0-9_\-.]+@[a-zA-Z0-9_\-.]+\.[a-zA-Z]{2,}$", str2):
+    if re.match(r"^[a-zA-Z0-9_.]+@[a-zA-Z0-9_.]+\.[a-zA-Z]{2,}$", str2):
         userIdValid=True
     else:
         condition1.config(text='Invalid Email Id', fg="red")
@@ -514,7 +541,7 @@ def signUp():
         head.config(text="Error")
         condition4.config(text="• Confirm password not \nsame as Password.", fg="red")
     if userIdValid and req[5] and confirm_password.get()==password1 and name_entry1.get().replace(" ",""):
-        temp_dict=[{'Type': type_variable.get(), 'Name': name_entry1.get(), 'Locality': locality_variable.get(), 'Email Id': emailId2.get(), 'Password': password2.get(), 'Authorized': 'N'}]
+        temp_dict=[{'Type': type_variable.get(), 'Name': name_entry1.get(), 'Locality': locality_variable.get(), 'Email Id': emailId2.get().lower(), 'Password': password2.get(), 'Authorized': 'N'}]
         temp_df=pd.DataFrame(temp_dict)
         login_info_df=pd.concat([login_info_df,temp_df], ignore_index=True)
         login_info_df.to_csv('temp.csv', index=False)
