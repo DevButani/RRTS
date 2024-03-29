@@ -129,7 +129,7 @@ def mayor_page(window,Database,locality_options):
     resource_type_menu1.config(highlightbackground="#05386B", highlightcolor="white", font=("yu gothic ui semibold", 12), fg="white", bg='#05386B', activebackground="#05386B", activeforeground="white")
     rtmenu1=report2.nametowidget(resource_type_menu1.menuname)
     rtmenu1.config(bg='#05386B', font=("yu gothic ui semibold", 12), fg="white", activebackground="black", activeforeground="white")
-    resource_type_menu1.place(x=report2.winfo_screenwidth()*0.15, y=report2.winfo_screenheight()*0.125, width=int(report2.winfo_screenwidth()*0.1), height=35)
+    resource_type_menu1.place(x=report2.winfo_screenwidth()*0.145, y=report2.winfo_screenheight()*0.125, width=int(report2.winfo_screenwidth()*0.1), height=35)
 
     stat205=Label(report2, bg="#05386b", fg="white", text="Resource Name: ", font=("yu gothic ui", 15))
     stat205.place(x=report2.winfo_screenwidth()*0.25, y=report2.winfo_screenheight()*0.125)    

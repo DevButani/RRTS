@@ -33,7 +33,9 @@ for i in range(len(links_df.index)):
 
 Database = (drive,database_folder,database_file)
 
-login_info_df=pd.read_csv('https://drive.google.com/uc?id='+database_file['Login Info'])
+file_obj = drive.CreateFile({'parents': [{'id': database_folder}], 'id': database_file["Login Info"]})
+file_obj.GetContentFile(filename='temp.csv')
+login_info_df=pd.read_csv('temp.csv')
 
 # Get today's date
 today = datetime.date.today()
@@ -310,7 +312,7 @@ name_entry1.place(x=login_box2.winfo_screenwidth()*0.225, y=login_box2.winfo_scr
 name_label1=Label(login_box2, text="• Name", fg="white", bg="#05386B", font=("yu gothic ui", 11, "bold"))
 name_label1.place(x=login_box2.winfo_screenwidth()*0.225, y=login_box2.winfo_screenheight()*0.14)
 
-locality_options = [x for x in links_df['File'].to_list() if(x[:3]!="new" and x!="Resources" and x!="Login Info")]
+locality_options = [x for x in links_df['File'].to_list() if(x[:3]!="new" and x not in ["Schedule", "Resources", "Login Info"])]
 locality_variable = StringVar()
 locality_variable.set(locality_options[0])
 locality_menu = OptionMenu(login_box2, locality_variable, *locality_options)

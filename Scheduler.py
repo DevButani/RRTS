@@ -26,7 +26,7 @@ links_df = pd.read_csv('https://drive.google.com/uc?id='+links_file)
 database_file = {}
 for i in range(len(links_df.index)):
     database_file[links_df['File'][i]] = links_df['Link'][i]
-localities_list = [x for x in links_df['File'].to_list() if(x[:3]!="new" and x!="Resources" and x!="Login Info")]
+localities_list = [x for x in links_df['File'].to_list() if(x[:3]!="new" and x not in ["Schedule", "Resources", "Login Info"])]
 
 # map categories to values
 severity_map = {"Critical": 3, "Severe": 2, "Moderate": 1, "Mild": 0}
@@ -151,6 +151,10 @@ while True:
     
     complaints_df = pd.concat([complaints_df,pending_complaints_df], ignore_index=True)
     complaints_df = pd.concat([complaints_df,in_progress_tasks_df], ignore_index=True)
+    file_obj = drive.CreateFile({'parents': [{'id': database_folder}], 'id': database_file['Schedule']})
+    complaints_df.to_csv('temp.csv', index=False)
+    file_obj.SetContentFile(filename='temp.csv')
+    file_obj.Upload()
     for locality in localities_list:
         file_obj = drive.CreateFile({'parents': [{'id': database_folder}], 'id': database_file[locality]})
         complaints_df[complaints_df['Locality']==locality].to_csv('temp.csv', index=False)
