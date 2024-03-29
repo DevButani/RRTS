@@ -200,15 +200,14 @@ def loginUser():
     error_label1.config(text="")
     email=email_entry1.get().lower()
     password=password_entry1.get()
-    global login_info_df, ind
+    global login_info_df
     idx=login_info_df[login_info_df['Email Id'] == email]
-    ind=idx.index[0]
-    if len(idx)>0 and password==login_info_df['Password'][ind]:
-        if login_info_df['Authorized'][ind]=='N':
+    if len(idx)>0 and password==login_info_df['Password'][idx.index[0]]:
+        if login_info_df['Authorized'][idx.index[0]]=='N':
             error_label1.config(text="Authorization Pending.\nPlease wait.")
         else:
-            userType=login_info_df['Type'][ind]
-            userLocality=login_info_df['Locality'][ind]
+            userType=login_info_df['Type'][idx.index[0]]
+            userLocality=login_info_df['Locality'][idx.index[0]]
             email_entry1.delete(0, END)
             password_entry1.delete(0, END)
             show_pass_var.set(0)
