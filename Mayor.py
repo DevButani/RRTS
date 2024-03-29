@@ -168,14 +168,14 @@ def mayor_page(window,Database,locality_options):
     stat302=Label(report3, bg="#05386b", fg="white", text="Pending: ", font=("yu gothic ui", 15))
     stat302.place(x=report3.winfo_screenwidth()*0.05, y=report3.winfo_screenheight()*0.125)
 
-    stat303=Label(report3, bg="#05386b", fg="#5cdb95", text="Result3.1 ", font=("yu gothic ui bold", 20))
-    stat303.place(x=report3.winfo_screenwidth()*0.15, y=report3.winfo_screenheight()*0.125)
+    stat303=Label(report3, bg="#05386b", fg="#5cdb95", text="75", font=("yu gothic ui bold", 15), borderwidth=3, relief="ridge", width=int(report3.winfo_screenwidth()*0.008))
+    stat303.place(x=report3.winfo_screenwidth()*0.13, y=report3.winfo_screenheight()*0.124)
 
     stat304=Label(report3, bg="#05386b", fg="white", text="In Progress: ", font=("yu gothic ui", 15))
     stat304.place(x=report3.winfo_screenwidth()*0.3, y=report3.winfo_screenheight()*0.125)    
 
-    stat305=Label(report3, bg="#05386b", fg="#5cdb95", text="Result3.2 ", font=("yu gothic ui bold", 20))
-    stat305.place(x=report3.winfo_screenwidth()*0.4, y=report3.winfo_screenheight()*0.125)
+    stat305=Label(report3, bg="#05386b", fg="#5cdb95", text="69", font=("yu gothic ui bold", 15), borderwidth=3, relief="ridge", width=int(report3.winfo_screenwidth()*0.008))
+    stat305.place(x=report3.winfo_screenwidth()*0.4, y=report3.winfo_screenheight()*0.124)
 
     def exit():
         mayor_frame.destroy()
