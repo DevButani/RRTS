@@ -1,6 +1,7 @@
 from tkinter import *
 from PIL import ImageTk, Image  # type "Pip install pillow" in your terminal to install ImageTk and Image module
 import pandas as pd
+import re
 from functools import partial
 
 def mayor_page(window,Database,locality_options):
@@ -74,11 +75,17 @@ def mayor_page(window,Database,locality_options):
     pmenu1.config(bg='#05386B', font=("yu gothic ui semibold", 12), fg="white", activebackground="black", activeforeground="white")
     problem_menu1.place(x=report1.winfo_screenwidth()*0.325, y=report1.winfo_screenheight()*0.125, width=int(report1.winfo_screenwidth()*0.12), height=35)
 
+    get_result_button1=Button(report1, bg="white", fg="#05386b", text="Get", font=("yu gothic ui", 12), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", width=int(report1.winfo_screenwidth()*0.005))
+    get_result_button1.place(x=report1.winfo_screenwidth()*0.485, y=report1.winfo_screenheight()*0.125)
+
     stat106=Label(report1, bg="#05386b", fg="#5cdb95", text="Result1", font=("yu gothic ui bold", 20))
-    stat106.place(x=report1.winfo_screenwidth()*0.5, y=report1.winfo_screenheight()*0.125)   
+    stat106.place(x=report1.winfo_screenwidth()*0.55, y=report1.winfo_screenheight()*0.125)   
 
     report2=Frame(box1, bg="#05386b", width=box1.winfo_screenwidth(), height=int(box1.winfo_screenheight()*0.23), borderwidth=0, highlightthickness=0)
     report2.place(x=0,y=box1.winfo_screenheight()*0.23)
+
+    separator_frame1=Frame(report2, bg="white", width=int(report2.winfo_screenwidth()*0.75), height=int(report2.winfo_screenheight()*0.001))
+    separator_frame1.place(x=0, y=0)
 
     stat201=Label(report2, bg="#05386b", fg="white", text="No. of Resources utilised from ", font=("yu gothic ui", 15))
     stat201.place(x=report2.winfo_screenwidth()*0.05, y=report2.winfo_screenheight()*0.05)
@@ -142,12 +149,18 @@ def mayor_page(window,Database,locality_options):
     rnmenu1.config(bg='#05386B', font=("yu gothic ui semibold", 12), fg="white", activebackground="black", activeforeground="white")
     resource_name_menu1.place(x=report2.winfo_screenwidth()*0.35, y=report2.winfo_screenheight()*0.125, width=int(report2.winfo_screenwidth()*0.12), height=35)
 
+    get_result_button2=Button(report2, bg="white", fg="#05386b", text="Get", font=("yu gothic ui", 12), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", width=int(report2.winfo_screenwidth()*0.005))
+    get_result_button2.place(x=report2.winfo_screenwidth()*0.485, y=report2.winfo_screenheight()*0.125)
+
     stat205=Label(report2, bg="#05386b", fg="#5cdb95", text="Result2", font=("yu gothic ui bold", 20))
-    stat205.place(x=report2.winfo_screenwidth()*0.5, y=report2.winfo_screenheight()*0.125)   
+    stat205.place(x=report2.winfo_screenwidth()*0.55, y=report2.winfo_screenheight()*0.125)   
 
 
     report3=Frame(box1, bg="#05386b", width=box1.winfo_screenwidth(), height=int(box1.winfo_screenheight()*0.23), borderwidth=0, highlightthickness=0)
     report3.place(x=0,y=box1.winfo_screenheight()*0.46)
+
+    separator_frame2=Frame(report3, bg="white", width=int(report3.winfo_screenwidth()*0.75), height=int(report3.winfo_screenheight()*0.001))
+    separator_frame2.place(x=0, y=0)
 
     stat301=Label(report3, bg="#05386b", fg="white", text="No. of currently outstanding Repairs: ", font=("yu gothic ui", 15))
     stat301.place(x=report3.winfo_screenwidth()*0.05, y=report3.winfo_screenheight()*0.05)
