@@ -78,8 +78,8 @@ def mayor_page(window,Database,locality_options):
     get_result_button1=Button(report1, bg="white", fg="#05386b", text="Get", font=("yu gothic ui", 12), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", width=int(report1.winfo_screenwidth()*0.005))
     get_result_button1.place(x=report1.winfo_screenwidth()*0.485, y=report1.winfo_screenheight()*0.125)
 
-    stat106=Label(report1, bg="#05386b", fg="#5cdb95", text="Result1", font=("yu gothic ui bold", 20))
-    stat106.place(x=report1.winfo_screenwidth()*0.55, y=report1.winfo_screenheight()*0.125)   
+    stat106=Label(report1, bg="#05386b", fg="#5cdb95", text="55", font=("yu gothic ui bold", 15), borderwidth=3, relief="ridge", width=int(report1.winfo_screenwidth()*0.005))
+    stat106.place(x=report1.winfo_screenwidth()*0.55, y=report1.winfo_screenheight()*0.124)   
 
     report2=Frame(box1, bg="#05386b", width=box1.winfo_screenwidth(), height=int(box1.winfo_screenheight()*0.23), borderwidth=0, highlightthickness=0)
     report2.place(x=0,y=box1.winfo_screenheight()*0.23)
@@ -152,8 +152,8 @@ def mayor_page(window,Database,locality_options):
     get_result_button2=Button(report2, bg="white", fg="#05386b", text="Get", font=("yu gothic ui", 12), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", width=int(report2.winfo_screenwidth()*0.005))
     get_result_button2.place(x=report2.winfo_screenwidth()*0.485, y=report2.winfo_screenheight()*0.125)
 
-    stat205=Label(report2, bg="#05386b", fg="#5cdb95", text="Result2", font=("yu gothic ui bold", 20))
-    stat205.place(x=report2.winfo_screenwidth()*0.55, y=report2.winfo_screenheight()*0.125)   
+    stat205=Label(report2, bg="#05386b", fg="#5cdb95", text="25", font=("yu gothic ui bold", 15), borderwidth=3, relief="ridge", width=int(report2.winfo_screenwidth()*0.005))
+    stat205.place(x=report2.winfo_screenwidth()*0.55, y=report2.winfo_screenheight()*0.124)   
 
 
     report3=Frame(box1, bg="#05386b", width=box1.winfo_screenwidth(), height=int(box1.winfo_screenheight()*0.23), borderwidth=0, highlightthickness=0)
