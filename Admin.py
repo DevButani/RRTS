@@ -1,10 +1,12 @@
 import pandas as pd
-#import numpy as np
 from tkinter import *
+from PIL import ImageTk, Image
+#import numpy as np
 from functools import partial
 from datetime import date
 
-def admin_page(window,Database,login_info_df):
+def admin_page(window, Database, login_info_df):
+
     resources_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2]["Resources"])
     unauthorized_df=login_info_df[login_info_df['Authorized']=='N']
     authorized_df=login_info_df[login_info_df['Authorized']=='Y']
@@ -13,165 +15,18 @@ def admin_page(window,Database,login_info_df):
     authorized_df.reset_index(inplace=True, drop=True)
     unauthorized_df=pd.concat([unauthorized_df,authorized_df], ignore_index=True)
 
-    admin_frame=Frame(window)
-    admin_frame.grid(row=0, column=0, sticky='nsew')
-
-    resource_frame=Frame(admin_frame)
-    display_frame=Frame(admin_frame)
-    authorization_frame=Frame(admin_frame)
-
     resources_updated=False
     login_info_updated=False
 
-    rsrc_not_packed=True
-    auth_not_packed=True
+    resource_check_frame=Frame(window)
+    resource_update_frame=Frame(window)
+    authorization_frame=Frame(window)
 
-    def update_resources_page():
-        display_frame.pack_forget()
-        authorization_frame.pack_forget()
+    for frame in (resource_check_frame, resource_update_frame, authorization_frame):
+        frame.grid(row=0,column=0, sticky='nsew')
 
-        nonlocal rsrc_not_packed
-    
-        resource_type=StringVar()
-        resource_type.set("[select]")
-        resource_name=StringVar()
-        resource_name.set("[select]")
-        resource_count=IntVar()
-        resource_count.set(0)
-
-        def register_entries():
-            nonlocal resources_updated
-            resources_updated = True
-            resources_df.iloc[((resources_df['Resource Type']==resource_type.get()) & (resources_df['Name']==resource_name.get())),2]=resource_count.get()
-            resource_type.set("[select]")
-            resource_name.set("[select]")
-            resource_count.set(0)
-
-        def set_resource_names(type):
-            menu=resource_name_menu["menu"]
-            menu.delete(0,"end")
-            for string in name_list[type]:
-                menu.add_command(label=string, command=lambda value=string: resource_name.set(value))
-            resource_name.set("[select]")
-
-        if rsrc_not_packed:
-            Label(resource_frame,text="Choose Resource ",font=('Courier New Greek',18)).pack(pady=20)
-            type_list=["Raw Materials","Machines","Personnel"]
-            resource_type_menu=OptionMenu(resource_frame,resource_type,*type_list, command=set_resource_names)
-            resource_type_menu.config(font=('Courier New Greek',15),width=18)
-            resource_type_menu.pack(anchor=CENTER,padx=70)
-
-            name_list={
-                "Raw Materials": ["Asphalt", "Bitumen", "Concrete"],
-                "Machines": ["Bulldozer", "Road Roller", "Concrete Mixer", "Jackhammer"],
-                "Personnel": ["Engineer", "Worker", "Machine Operator"]
-            }
-
-            Label(resource_frame,text="Choose Type ",font=('Courier New Greek',18)).pack(pady=20)
-            resource_name_menu=OptionMenu(resource_frame,resource_name,"[select]")
-            resource_name_menu.config(font=('Courier New Greek',15),width=18)
-            resource_name_menu.pack(anchor=CENTER,padx=70)
-
-            Label(resource_frame,text="Enter the total number of units :",font=('Courier New Greek',18)).pack(pady=15)
-            street_entry=Entry(resource_frame,textvariable=resource_count,font=('Courier New Greek',15))
-            street_entry.pack()
-            Button(resource_frame,text="Register", font=('Poppins bold', 18),command=register_entries).pack()
-            
-            rsrc_not_packed=False
-
-        resource_frame.pack()
-
-    Button(admin_frame, text="Update Resources", command=update_resources_page).pack()
-
-
-    def check_resources_page():
-        resource_frame.pack_forget()
-        authorization_frame.pack_forget()
-
-        Label(display_frame,text="Resource Utilisation  Information ",font=('Courier New Greek',22,'underline','bold')).grid(row=0,column=0,columnspan=4,pady=(0,10))
-        resource_list_var=[StringVar()]
-        resource_list_var[0].set("Resource Type")
-        resource_list_entry=[Entry(display_frame,textvariable=resource_list_var[0])]
-        resource_list_entry[0].config(state='disabled')
-        resource_list_entry[0].grid(row=1,column=0)
-        type_list_var=[StringVar()]
-        type_list_var[0].set("Resource Name")
-        type_list_entry=[Entry(display_frame,textvariable=type_list_var[0])]
-        type_list_entry[0].config(state='disabled')
-        type_list_entry[0].grid(row=1,column=1)
-        num_available_var=[StringVar()]
-        num_available_var[0].set("Total Available")
-        num_available_entry=[Entry(display_frame,textvariable=num_available_var[0])]
-        num_available_entry[0].config(state='disabled')
-        num_available_entry[0].grid(row=1,column=2)
-        num_in_use_var=[StringVar()]
-        num_in_use_var[0].set("In Use")
-        num_in_use_entry=[Entry(display_frame,textvariable=num_in_use_var[0])]
-        num_in_use_entry[0].config(state='disabled')
-        num_in_use_entry[0].grid(row=1,column=3)
-        for i in resources_df.index:
-            resource_list_var.append(StringVar())
-            resource_list_var[i+1].set(str(resources_df.iat[i,0]))
-            resource_list_entry.append(Entry(display_frame,textvariable=resource_list_var[i+1]))
-            resource_list_entry[i+1].config(state='disabled')
-            resource_list_entry[i+1].grid(row=i+2,column=0)
-            type_list_var.append(StringVar())
-            type_list_var[i+1].set(str(resources_df.iat[i,1]))
-            type_list_entry.append(Entry(display_frame,textvariable=type_list_var[i+1]))
-            type_list_entry[i+1].config(state='disabled')
-            type_list_entry[i+1].grid(row=i+2,column=1)
-            num_available_var.append(StringVar())
-            num_available_var[i+1].set(str(resources_df.iat[i,2]))
-            num_available_entry.append(Entry(display_frame,textvariable=num_available_var[i+1]))
-            num_available_entry[i+1].config(state='disabled')
-            num_available_entry[i+1].grid(row=i+2,column=2)
-            num_in_use_var.append(StringVar())
-            num_in_use_var[i+1].set(str(resources_df.iat[i,3]))
-            num_in_use_entry.append(Entry(display_frame,textvariable=num_in_use_var[i+1]))
-            num_in_use_entry[i+1].config(state='disabled')
-            num_in_use_entry[i+1].grid(row=i+2,column=3)
-        display_frame.pack()
-
-    Button(admin_frame, text="Check Resources", command=check_resources_page).pack()
-
-
-    def authorize_registrations():
-        resource_frame.pack_forget()
-        display_frame.pack_forget()
-
-        nonlocal login_info_df, unauthorized_df, auth_not_packed
-        authorization_canvas = Canvas(authorization_frame, width=500)
-
-        records = []
-        def change_status(row):
-            nonlocal unauthorized_df, login_info_updated
-            login_info_updated = True
-            if unauthorized_df['Authorized'][row]=="Y": unauthorized_df.at[row, 'Authorized'] = "N"
-            elif unauthorized_df['Authorized'][row]=="N": unauthorized_df.at[row, 'Authorized'] = "Y"
-            records[row].config(text=unauthorized_df['Locality'][row] + " | " + unauthorized_df['Type'][row] + " | " + unauthorized_df['Name'][row] + " | " + unauthorized_df['Email Id'][row] + " | Status: " + unauthorized_df['Authorized'][row])
-        y = 0
-        row_count=len(unauthorized_df.index)
-        for row in range(row_count):
-            records.append(Label(authorization_canvas, text=unauthorized_df['Locality'][row] + " | " + unauthorized_df['Type'][row] + " | " + unauthorized_df['Name'][row] + " | " + unauthorized_df['Email Id'][row] + " | Status: " + unauthorized_df['Authorized'][row]))
-            authorization_canvas.create_window(0, y, window=records[row], anchor=NW)
-            status_button=Button(authorization_canvas, text="Change Status", command=partial(change_status, row))
-            authorization_canvas.create_window(400, y, window=status_button, anchor=NW)
-            y += 20
-
-        scrollbar = Scrollbar(authorization_canvas, orient=VERTICAL, command=authorization_canvas.yview)
-        scrollbar.place(relx=1, rely=0, relheight=1, anchor=NE)
-        authorization_canvas.config(yscrollcommand=scrollbar.set, scrollregion=(0, 0, 0, y))
-        
-        if auth_not_packed:
-            authorization_canvas.pack()
-            auth_not_packed=False
-
-        authorization_frame.pack()
-
-    Button(admin_frame, text="Authorize New Registrations", command=authorize_registrations).pack()
-
-
-    admin_frame.tkraise()
+    def show_frame(frame):
+        frame.tkraise()
 
     def exit():
         nonlocal login_info_df, unauthorized_df
@@ -188,6 +43,215 @@ def admin_page(window,Database,login_info_df):
             file_obj.SetContentFile(filename='temp.csv')
             file_obj.Upload()
         
-        admin_frame.destroy()
+        resource_check_frame.destroy()
+        resource_update_frame.destroy()
+        authorization_frame.destroy()
 
-    Button(admin_frame, text="Log Out", command=exit).pack()
+    logout_img=Image.open('Images/logout1.png')
+    logout_pic=ImageTk.PhotoImage(logout_img)
+
+    header1=Listbox(resource_check_frame, bg="#5cdb95", width=resource_check_frame.winfo_screenwidth(), height=int(resource_check_frame.winfo_screenheight()*0.01), borderwidth=0, highlightthickness=0)
+    header1.place(x=0,y=0)
+
+    title1=Label(header1, text="CITY ADMIN", bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
+    title1.place(x=header1.winfo_screenwidth()*0.45, y=header1.winfo_screenheight()*0.01)
+
+    logout_button1=Button(header1, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
+    logout_button1.image=logout_pic
+    logout_button1.place(x=header1.winfo_screenwidth()*0.9, y=header1.winfo_screenheight()*0.01)
+
+    resource_check_button1=Button(header1, text="Check Resources", bg="white", fg="#05386b", cursor="hand2", font=("yu gothic ui bold", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b")
+    resource_check_button1.place(x=header1.winfo_screenwidth()*0.01, y=header1.winfo_screenheight()*0.055)
+
+    resource_update_button1=Button(header1, text="Update Resources", bg="#5cdb95", fg="#05386b", cursor="hand2", font=("yu gothic ui bold", 15), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", command=lambda: show_frame(resource_update_frame))
+    resource_update_button1.place(x=header1.winfo_screenwidth()*0.12, y=header1.winfo_screenheight()*0.055)
+
+    authorization_button1=Button(header1, text="Authorize New Registrations", bg="#5cdb95", fg="#05386b", cursor="hand2", font=("yu gothic ui bold", 15), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", command=lambda: show_frame(authorization_frame))
+    authorization_button1.place(x=header1.winfo_screenwidth()*0.24, y=header1.winfo_screenheight()*0.055)
+
+    centre1=Listbox(resource_check_frame, bg="white", width=resource_check_frame.winfo_screenwidth(), height=int(resource_check_frame.winfo_screenheight()), borderwidth=0, highlightthickness=0)
+    centre1.place(x=0,y=resource_check_frame.winfo_screenheight()*0.1)
+
+    box1=Frame(centre1, bg="#05386B", borderwidth=0, highlightthickness=0, width=int(resource_check_frame.winfo_screenwidth()*0.7), height=int(resource_check_frame.winfo_screenheight()*0.7))
+    box1.place(x=resource_check_frame.winfo_screenwidth()*0.075, y=resource_check_frame.winfo_screenheight()*0.1)
+
+    resource_list_var=[StringVar()]
+    resource_list_var[0].set("Resource Type")
+    resource_list_entry=[Entry(box1,textvariable=resource_list_var[0], bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 20), disabledbackground="#05386b", disabledforeground="#5cdb95")]
+    resource_list_entry[0].config(state='disabled')
+    resource_list_entry[0].grid(row=1,column=0)
+    type_list_var=[StringVar()]
+    type_list_var[0].set("Resource Name")
+    type_list_entry=[Entry(box1,textvariable=type_list_var[0], bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 20), disabledbackground="#05386b", disabledforeground="#5cdb95")]
+    type_list_entry[0].config(state='disabled')
+    type_list_entry[0].grid(row=1,column=1)
+    num_available_var=[StringVar()]
+    num_available_var[0].set("Total Available")
+    num_available_entry=[Entry(box1,textvariable=num_available_var[0], bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 20), disabledbackground="#05386b", disabledforeground="#5cdb95")]
+    num_available_entry[0].config(state='disabled')
+    num_available_entry[0].grid(row=1,column=2)
+    num_in_use_var=[StringVar()]
+    num_in_use_var[0].set("In Use")
+    num_in_use_entry=[Entry(box1,textvariable=num_in_use_var[0], bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 20), disabledbackground="#05386b", disabledforeground="#5cdb95")]
+    num_in_use_entry[0].config(state='disabled')
+    num_in_use_entry[0].grid(row=1,column=3)
+    for i in resources_df.index:
+        resource_list_var.append(StringVar())
+        resource_list_var[i+1].set(str(resources_df.iat[i,0]))
+        resource_list_entry.append(Entry(box1,textvariable=resource_list_var[i+1], bg="#05386b", fg="white", font=("yu gothic ui bold", 20), disabledbackground="#05386b", disabledforeground="white"))
+        resource_list_entry[i+1].config(state='disabled')
+        resource_list_entry[i+1].grid(row=i+2,column=0)
+        type_list_var.append(StringVar())
+        type_list_var[i+1].set(str(resources_df.iat[i,1]))
+        type_list_entry.append(Entry(box1,textvariable=type_list_var[i+1], bg="#05386b", fg="white", font=("yu gothic ui bold", 20), disabledbackground="#05386b", disabledforeground="white"))
+        type_list_entry[i+1].config(state='disabled')
+        type_list_entry[i+1].grid(row=i+2,column=1)
+        num_available_var.append(StringVar())
+        num_available_var[i+1].set(str(resources_df.iat[i,2]))
+        num_available_entry.append(Entry(box1,textvariable=num_available_var[i+1], bg="#05386b", fg="white", font=("yu gothic ui bold", 20), disabledbackground="#05386b", disabledforeground="white"))
+        num_available_entry[i+1].config(state='disabled')
+        num_available_entry[i+1].grid(row=i+2,column=2)
+        num_in_use_var.append(StringVar())
+        num_in_use_var[i+1].set(str(resources_df.iat[i,3]))
+        num_in_use_entry.append(Entry(box1,textvariable=num_in_use_var[i+1], bg="#05386b", fg="white", font=("yu gothic ui bold", 20), disabledbackground="#05386b", disabledforeground="white"))
+        num_in_use_entry[i+1].config(state='disabled')
+        num_in_use_entry[i+1].grid(row=i+2,column=3)
+
+
+
+    # resource update
+
+    header2=Listbox(resource_update_frame, bg="#5cdb95", width=resource_check_frame.winfo_screenwidth(), height=int(resource_check_frame.winfo_screenheight()*0.01), borderwidth=0, highlightthickness=0)
+    header2.place(x=0,y=0)
+
+    title2=Label(header2, text="CITY ADMIN", bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
+    title2.place(x=header2.winfo_screenwidth()*0.45, y=header2.winfo_screenheight()*0.01)
+
+    logout_button2=Button(header2, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
+    logout_button2.image=logout_pic
+    logout_button2.place(x=header2.winfo_screenwidth()*0.9, y=header2.winfo_screenheight()*0.01)
+
+    resource_check_button2=Button(header2, text="Check Resources", bg="#5cdb95", fg="#05386b", cursor="hand2", font=("yu gothic ui bold", 15), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", command=lambda: show_frame(resource_check_frame))
+    resource_check_button2.place(x=header2.winfo_screenwidth()*0.01, y=header2.winfo_screenheight()*0.055)
+
+    resource_update_button2=Button(header2, text="Update Resources", bg="white", fg="#05386b", cursor="hand2", font=("yu gothic ui bold", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b")
+    resource_update_button2.place(x=header2.winfo_screenwidth()*0.12, y=header2.winfo_screenheight()*0.055)
+
+    authorization_button2=Button(header2, text="Authorize New Registrations", bg="#5cdb95", fg="#05386b", cursor="hand2", font=("yu gothic ui bold", 15), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", command=lambda: show_frame(authorization_frame))
+    authorization_button2.place(x=header2.winfo_screenwidth()*0.24, y=header2.winfo_screenheight()*0.055)
+
+    centre2=Listbox(resource_update_frame, bg="white", width=resource_update_frame.winfo_screenwidth(), height=int(resource_update_frame.winfo_screenheight()), borderwidth=0, highlightthickness=0)
+    centre2.place(x=0,y=resource_update_frame.winfo_screenheight()*0.1)
+
+    box2=Frame(centre2, bg="#05386B", borderwidth=0, highlightthickness=0, width=int(resource_update_frame.winfo_screenwidth()*0.7), height=int(resource_update_frame.winfo_screenheight()*0.7))
+    box2.place(x=resource_update_frame.winfo_screenwidth()*0.15, y=resource_update_frame.winfo_screenheight()*0.1)
+
+    resource_name_dict={
+        "Raw Materials": ["Asphalt", "Bitumen", "Concrete"],
+        "Machines": ["Bulldozer", "Road Roller", "Concrete Mixer", "Jackhammer"],
+        "Personnel": ["Engineer", "Worker", "Machine Operator"]
+    }
+
+    def register_entries():
+        nonlocal resources_updated
+        resources_updated = True
+        resources_df.iloc[((resources_df['Resource Type']==resource_type_variable.get()) & (resources_df['Name']==resource_name_variable.get())),2]=resource_count_variable.get()
+        resource_type_variable.set("[select]")
+        resource_name_variable.set("[select]")
+        resource_count_variable.set(0)
+
+    def set_resource_names(type):
+        menu = resource_name_menu["menu"]
+        menu.delete(0,"end")
+        for string in resource_name_dict[type]:
+            menu.add_command(label=string, command=lambda value=string: resource_name_variable.set(value))
+        resource_name_variable.set("[select]")
+
+    resource_type_label=Label(box2, bg="#05386b", fg="#5cdb95", text="Resource Type: ", font=("yu gothic ui", 20))
+    resource_type_label.place(x=box2.winfo_screenwidth()*0.01, y=box2.winfo_screenheight()*0.125)
+
+    resource_type_options=["Raw Materials", "Personnel", "Machines"]
+    resource_type_variable = StringVar()
+    resource_type_variable.set("[select]")
+    resource_type_menu = OptionMenu(box2, resource_type_variable, *resource_type_options, command=set_resource_names)
+    resource_type_menu.config(highlightbackground="#05386B", highlightcolor="white", font=("yu gothic ui semibold", 17), fg="white", bg='#05386B', activebackground="#05386B", activeforeground="white")
+    rtmenu=box2.nametowidget(resource_type_menu.menuname)
+    rtmenu.config(bg='#05386B', font=("yu gothic ui semibold", 17), fg="white", activebackground="black", activeforeground="white")
+    resource_type_menu.place(x=box2.winfo_screenwidth()*0.15, y=box2.winfo_screenheight()*0.125, width=int(box2.winfo_screenwidth()*0.2), height=int(box2.winfo_screenheight()*0.05))
+
+    resource_name_label=Label(box2, bg="#05386b", fg="#5cdb95", text="Resource Name: ", font=("yu gothic ui", 20))
+    resource_name_label.place(x=box2.winfo_screenwidth()*0.35, y=box2.winfo_screenheight()*0.125)    
+
+    resource_name_variable = StringVar()
+    resource_name_variable.set("[select]")
+    resource_name_menu = OptionMenu(box2, resource_name_variable, "[select]")
+    resource_name_menu.config(highlightbackground="#05386B", highlightcolor="white", font=("yu gothic ui semibold", 17), fg="white", bg='#05386B', activebackground="#05386B", activeforeground="white")
+    rnmenu=box2.nametowidget(resource_name_menu.menuname)
+    rnmenu.config(bg='#05386B', font=("yu gothic ui semibold", 17), fg="white", activebackground="black", activeforeground="white")
+    resource_name_menu.place(x=box2.winfo_screenwidth()*0.49, y=box2.winfo_screenheight()*0.125, width=int(box2.winfo_screenwidth()*0.2), height=int(box2.winfo_screenheight()*0.05))    
+
+    resource_count_variable=IntVar()
+    resource_count_variable.set(0)
+    resource_count_label=Label(box2, text="Enter the total number of units :", bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 20))
+    resource_count_label.place(x=box2.winfo_screenwidth()*0.075, y=box2.winfo_screenheight()*0.3)
+    resource_count_entry=Entry(box2, textvariable=resource_count_variable, bg="#05386b", fg="white", font=("yu gothic ui", 20), width=int(box2.winfo_screenwidth()*0.01), highlightthickness=2, highlightcolor="white")
+    resource_count_entry.place(x=box2.winfo_screenwidth()*0.375, y=box2.winfo_screenheight()*0.3)
+
+    submit_button=Button(box2, text="Register Complaint", bg="white", fg="#05386B", font=("yu gothic ui bold", 20), cursor="hand2", activebackground="white", activeforeground="#05386B", borderwidth=0, width=int(box2.winfo_screenwidth()*0.0125), command=register_entries)
+    submit_button.place(x=box2.winfo_screenwidth()*0.25, y=box2.winfo_screenheight()*0.475)
+
+    # authorize
+
+    header3=Listbox(authorization_frame, bg="#5cdb95", width=authorization_frame.winfo_screenwidth(), height=int(authorization_frame.winfo_screenheight()*0.01), borderwidth=0, highlightthickness=0)
+    header3.place(x=0,y=0)
+
+    title3=Label(header3, text="CITY ADMIN", bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
+    title3.place(x=header3.winfo_screenwidth()*0.45, y=header3.winfo_screenheight()*0.01)
+
+    logout_button3=Button(header3, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
+    logout_button3.image=logout_pic
+    logout_button3.place(x=header3.winfo_screenwidth()*0.9, y=header3.winfo_screenheight()*0.01)
+
+    resource_check_button3=Button(header3, text="Check Resources", bg="#5cdb95", fg="#05386b", cursor="hand2", font=("yu gothic ui bold", 15), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", command=lambda: show_frame(resource_check_frame))
+    resource_check_button3.place(x=header3.winfo_screenwidth()*0.01, y=header3.winfo_screenheight()*0.055)
+
+    resource_update_button3=Button(header3, text="Update Resources", bg="#5cdb95", fg="#05386b", cursor="hand2", font=("yu gothic ui bold", 15), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", command=lambda: show_frame(resource_update_frame))
+    resource_update_button3.place(x=header3.winfo_screenwidth()*0.12, y=header3.winfo_screenheight()*0.055)
+
+    authorization_button3=Button(header3, text="Authorize New Registrations", bg="white", fg="#05386b", cursor="hand2", font=("yu gothic ui bold", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b")
+    authorization_button3.place(x=header3.winfo_screenwidth()*0.24, y=header3.winfo_screenheight()*0.055)
+
+    centre3=Listbox(authorization_frame, bg="white", width=authorization_frame.winfo_screenwidth(), height=int(authorization_frame.winfo_screenheight()), borderwidth=0, highlightthickness=0)
+    centre3.place(x=0,y=authorization_frame.winfo_screenheight()*0.1)
+
+    box3=Frame(centre3, bg="#05386B", borderwidth=0, highlightthickness=0, width=int(authorization_frame.winfo_screenwidth()*0.7), height=int(authorization_frame.winfo_screenheight()*0.7))
+    box3.place(x=authorization_frame.winfo_screenwidth()*0.15, y=authorization_frame.winfo_screenheight()*0.1)
+
+    authorization_canvas = Canvas(box3, width=int(box3.winfo_screenwidth()*0.697), height=int(box1.winfo_screenheight()*0.697), bg="#05386b")
+    authorization_canvas.place(x=0,y=0)
+
+    records = []
+
+    def change_status(row):
+        nonlocal unauthorized_df, login_info_updated
+        login_info_updated = True
+        if unauthorized_df['Authorized'][row]=="Y": unauthorized_df.at[row, 'Authorized'] = "N"
+        elif unauthorized_df['Authorized'][row]=="N": unauthorized_df.at[row, 'Authorized'] = "Y"
+        records[row].config(text=unauthorized_df['Locality'][row] + " | " + unauthorized_df['Type'][row] + " | " + unauthorized_df['Name'][row] + " | " + unauthorized_df['Email Id'][row] + " | Status: " + unauthorized_df['Authorized'][row])
+
+    y = 0
+    row_count=len(unauthorized_df.index)
+    for row in range(row_count):
+        records.append(Label(authorization_canvas, text=unauthorized_df['Locality'][row] + " | " + unauthorized_df['Type'][row] + " | " + unauthorized_df['Name'][row] + " | " + unauthorized_df['Email Id'][row] + " | Status: " + unauthorized_df['Authorized'][row], bg="#05386b", fg="white", font=("yu gothic ui", 15)))
+        authorization_canvas.create_window(0, y+2.5, window=records[row], anchor=NW)
+        status_button=Button(authorization_canvas, text="Change Status", bg="#05386b", fg="white", command=partial(change_status, row), border=0, highlightthickness=0, activebackground="#05386b", activeforeground="#5cdb95", font=("yu gothic ui", 15))
+        authorization_canvas.create_window(650, y+2.5, window=status_button, anchor=NW)
+        line_separator=Frame(authorization_canvas, width=int(authorization_canvas.winfo_screenheight()*1.1), height=2, bg="white")
+        authorization_canvas.create_window(0, y+50, window=line_separator, anchor=NW)
+        y += 60
+
+    scrollbar = Scrollbar(authorization_canvas, orient=VERTICAL, command=authorization_canvas.yview)
+    scrollbar.place(relx=1, rely=0, relheight=1, anchor=NE)
+    authorization_canvas.config(yscrollcommand=scrollbar.set, scrollregion=(0, 0, 0, y))
+
+    show_frame(resource_check_frame)
