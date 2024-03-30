@@ -217,8 +217,7 @@ def loginUser():
             elif userType=="Supervisor":
                 Supervisor.supervisor_page(window,Database,userLocality)
             elif userType=="Admin":
-                login_info_df.to_csv('temp.csv', index=False)
-                Admin.admin_page(window,Database)
+                Admin.admin_page(window,Database,login_info_df)
                 login_info_df=pd.read_csv('temp.csv')
             else:
                 Mayor.mayor_page(window,Database,locality_options)

@@ -4,18 +4,17 @@ from tkinter import *
 from functools import partial
 from datetime import date
 
-def admin_page(window,Database):
-    admin_frame=Frame(window)
-    admin_frame.grid(row=0, column=0, sticky='nsew')
-
+def admin_page(window,Database,login_info_df):
     resources_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2]["Resources"])
-    login_info_df=pd.read_csv('temp.csv')
     unauthorized_df=login_info_df[login_info_df['Authorized']=='N']
     authorized_df=login_info_df[login_info_df['Authorized']=='Y']
     login_info_df.drop(login_info_df[login_info_df['Authorized']!='-'].index, inplace=True)
     unauthorized_df.reset_index(inplace=True, drop=True)
     authorized_df.reset_index(inplace=True, drop=True)
     unauthorized_df=pd.concat([unauthorized_df,authorized_df], ignore_index=True)
+
+    admin_frame=Frame(window)
+    admin_frame.grid(row=0, column=0, sticky='nsew')
 
     resource_frame=Frame(admin_frame)
     display_frame=Frame(admin_frame)

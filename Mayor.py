@@ -3,8 +3,11 @@ from PIL import ImageTk, Image  # type "Pip install pillow" in your terminal to 
 import pandas as pd
 import re
 from functools import partial
+from datetime import *
 
 def mayor_page(window,Database,locality_options):
+    schedule_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2]["Schedule"])
+    
     logout_img=Image.open('Images/logout1.png')
     logout_pic=ImageTk.PhotoImage(logout_img)
 
@@ -30,7 +33,7 @@ def mayor_page(window,Database,locality_options):
     stat101.place(x=report1.winfo_screenwidth()*0.05, y=report1.winfo_screenheight()*0.05)
 
     def date1Active():
-        stat103.config(text="(Dates in DD-MM-YYYY format)")
+        stat103.config(text="(Dates in DD-MM-YYYY format)", fg='white')
     def date1Inactive():
         stat103.config(text="")
 
@@ -50,7 +53,7 @@ def mayor_page(window,Database,locality_options):
     to_date1.bind('<Leave>', lambda event: date1Inactive())
 
     stat103=Label(report1, bg="#05386b", fg="white", text="", font=("yu gothic ui", 15))
-    stat103.place(x=report1.winfo_screenwidth()*0.46, y=report1.winfo_screenheight()*0.05)
+    stat103.place(x=report1.winfo_screenwidth()*0.47, y=report1.winfo_screenheight()*0.05)
 
     stat104=Label(report1, bg="#05386b", fg="white", text="Locality: ", font=("yu gothic ui", 15))
     stat104.place(x=report1.winfo_screenwidth()*0.05, y=report1.winfo_screenheight()*0.125)
@@ -75,10 +78,29 @@ def mayor_page(window,Database,locality_options):
     pmenu1.config(bg='#05386B', font=("yu gothic ui semibold", 12), fg="white", activebackground="black", activeforeground="white")
     problem_menu1.place(x=report1.winfo_screenwidth()*0.325, y=report1.winfo_screenheight()*0.125, width=int(report1.winfo_screenwidth()*0.12), height=35)
 
-    get_result_button1=Button(report1, bg="white", fg="#05386b", text="Get", font=("yu gothic ui", 12), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", width=int(report1.winfo_screenwidth()*0.005))
+    def getRepairs():
+        start_str=from_date1.get()
+        end_str=to_date1.get()
+        try:
+            start_date = datetime.strptime(start_str, "%d-%m-%Y")
+        except ValueError:
+            stat103.config(text="Invalid Dates", fg='red')
+            return
+        try:
+            end_date = datetime.strptime(end_str, "%d-%m-%Y")
+        except ValueError:
+            stat103.config(text="Invalid Dates", fg='red')
+            return
+        if (end_date-start_date).days <= 0:
+            stat103.config(text="Invalid Dates", fg='red')
+            return
+        
+        stat106.config(text="Nice")
+
+    get_result_button1=Button(report1, bg="white", fg="#05386b", text="Get", font=("yu gothic ui", 12), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", width=int(report1.winfo_screenwidth()*0.005), command=getRepairs)
     get_result_button1.place(x=report1.winfo_screenwidth()*0.485, y=report1.winfo_screenheight()*0.125)
 
-    stat106=Label(report1, bg="#05386b", fg="#5cdb95", text="55", font=("yu gothic ui bold", 15), borderwidth=3, relief="ridge", width=int(report1.winfo_screenwidth()*0.005))
+    stat106=Label(report1, bg="#05386b", fg="#5cdb95", text="", font=("yu gothic ui bold", 15), borderwidth=3, relief="ridge", width=int(report1.winfo_screenwidth()*0.005))
     stat106.place(x=report1.winfo_screenwidth()*0.55, y=report1.winfo_screenheight()*0.124)   
 
     report2=Frame(box1, bg="#05386b", width=box1.winfo_screenwidth(), height=int(box1.winfo_screenheight()*0.23), borderwidth=0, highlightthickness=0)
@@ -91,7 +113,7 @@ def mayor_page(window,Database,locality_options):
     stat201.place(x=report2.winfo_screenwidth()*0.05, y=report2.winfo_screenheight()*0.05)
 
     def date2Active():
-        stat203.config(text="(Dates in DD-MM-YYYY format)")
+        stat203.config(text="(Dates in DD-MM-YYYY format)", fg='white')
     def date2Inactive():
         stat203.config(text="")
 
@@ -111,7 +133,7 @@ def mayor_page(window,Database,locality_options):
     to_date2.bind('<Leave>', lambda event: date2Inactive())
 
     stat203=Label(report2, bg="#05386b", fg="white", text="", font=("yu gothic ui", 15))
-    stat203.place(x=report2.winfo_screenwidth()*0.46, y=report2.winfo_screenheight()*0.05)
+    stat203.place(x=report2.winfo_screenwidth()*0.47, y=report2.winfo_screenheight()*0.05)
 
     name_list={
         "All": ["All"],
@@ -149,10 +171,29 @@ def mayor_page(window,Database,locality_options):
     rnmenu1.config(bg='#05386B', font=("yu gothic ui semibold", 12), fg="white", activebackground="black", activeforeground="white")
     resource_name_menu1.place(x=report2.winfo_screenwidth()*0.35, y=report2.winfo_screenheight()*0.125, width=int(report2.winfo_screenwidth()*0.12), height=35)
 
-    get_result_button2=Button(report2, bg="white", fg="#05386b", text="Get", font=("yu gothic ui", 12), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", width=int(report2.winfo_screenwidth()*0.005))
+    def getResourceUtil():
+        start_str=from_date2.get()
+        end_str=to_date2.get()
+        try:
+            start_date = datetime.strptime(start_str, "%d-%m-%Y")
+        except ValueError:
+            stat203.config(text="Invalid Dates", fg='red')
+            return
+        try:
+            end_date = datetime.strptime(end_str, "%d-%m-%Y")
+        except ValueError:
+            stat203.config(text="Invalid Dates", fg='red')
+            return
+        if (end_date-start_date).days <= 0:
+            stat203.config(text="Invalid Dates", fg='red')
+            return
+        
+        stat205.config(text="Nice")
+
+    get_result_button2=Button(report2, bg="white", fg="#05386b", text="Get", font=("yu gothic ui", 12), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", width=int(report2.winfo_screenwidth()*0.005), command=getResourceUtil)
     get_result_button2.place(x=report2.winfo_screenwidth()*0.485, y=report2.winfo_screenheight()*0.125)
 
-    stat205=Label(report2, bg="#05386b", fg="#5cdb95", text="25", font=("yu gothic ui bold", 15), borderwidth=3, relief="ridge", width=int(report2.winfo_screenwidth()*0.005))
+    stat205=Label(report2, bg="#05386b", fg="#5cdb95", text="", font=("yu gothic ui bold", 15), borderwidth=3, relief="ridge", width=int(report2.winfo_screenwidth()*0.005))
     stat205.place(x=report2.winfo_screenwidth()*0.55, y=report2.winfo_screenheight()*0.124)   
 
 
