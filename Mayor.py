@@ -150,16 +150,17 @@ def mayor_page(window,Database,locality_options):
     def set_resource_names(type):
         menu = resource_name_menu1["menu"]
         menu.delete(0,"end")
+        if type != "All": menu.add_command(label="All", command=lambda value="All": resource_name_variable1.set(value))
         for string in resource_name_dict[type]:
             menu.add_command(label=string, command=lambda value=string: resource_name_variable1.set(value))
-        resource_name_variable1.set("[select]")
+        resource_name_variable1.set("All")
 
     stat204=Label(report2, bg="#05386b", fg="white", text="Resource Type: ", font=("yu gothic ui", 15))
     stat204.place(x=report2.winfo_screenwidth()*0.05, y=report2.winfo_screenheight()*0.125)
 
     resource_type_options=["All", "Raw Materials", "Personnel", "Machines"]
     resource_type_variable1 = StringVar()
-    resource_type_variable1.set("[select]")
+    resource_type_variable1.set("All")
     resource_type_menu1 = OptionMenu(report2, resource_type_variable1, *resource_type_options, command=set_resource_names)
     resource_type_menu1.config(highlightbackground="#05386B", highlightcolor="white", font=("yu gothic ui semibold", 12), fg="white", bg='#05386B', activebackground="#05386B", activeforeground="white")
     rtmenu1=report2.nametowidget(resource_type_menu1.menuname)
@@ -170,8 +171,8 @@ def mayor_page(window,Database,locality_options):
     stat205.place(x=report2.winfo_screenwidth()*0.25, y=report2.winfo_screenheight()*0.125)    
 
     resource_name_variable1 = StringVar()
-    resource_name_variable1.set("[select]")
-    resource_name_menu1 = OptionMenu(report2, resource_name_variable1, "[select]")
+    resource_name_variable1.set("All")
+    resource_name_menu1 = OptionMenu(report2, resource_name_variable1, "All")
     resource_name_menu1.config(highlightbackground="#05386B", highlightcolor="white", font=("yu gothic ui semibold", 12), fg="white", bg='#05386B', activebackground="#05386B", activeforeground="white")
     rnmenu1=report2.nametowidget(resource_name_menu1.menuname)
     rnmenu1.config(bg='#05386B', font=("yu gothic ui semibold", 12), fg="white", activebackground="black", activeforeground="white")
@@ -194,12 +195,10 @@ def mayor_page(window,Database,locality_options):
         if (end_date-start_date).days < 0:
             stat203.config(text="Invalid Dates", fg='red')
             return
-        if resource_name_variable1.get() == "[select]":
-            stat205.config(text="-")
-            return
         
         local_completed_df = completed_df[(completed_df['Completion Date'] >= start_date) & (completed_df['Completion Date'] <= end_date)]
-        if resource_name_variable1.get() == "All": resources_utilized = sum([local_completed_df[x].sum() for x in resource_name_dict["Raw Materials"]+resource_name_dict["Machines"]+resource_name_dict["Personnel"]])
+        if resource_type_variable1.get() == "All": resources_utilized = sum([local_completed_df[x].sum() for x in resource_name_dict["Raw Materials"]+resource_name_dict["Machines"]+resource_name_dict["Personnel"]])
+        elif resource_name_variable1.get() == "All": resources_utilized = sum([local_completed_df[x].sum() for x in resource_name_dict[resource_type_variable1.get()]])
         else: resources_utilized = local_completed_df[resource_name_variable1.get()].sum()
         stat205.config(text=resources_utilized)
 
