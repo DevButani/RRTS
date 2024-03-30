@@ -1,30 +1,22 @@
-import pandas as pd
 from tkinter import *
+from PIL import ImageTk, Image  # type "Pip install pillow" in your terminal to install ImageTk and Image module
+import pandas as pd
 from datetime import date
 
-def clerk_page(window,Database,locality):
-    new_complaints_df = pd.read_csv('https://drive.google.com/uc?id='+Database[2]["new "+locality])
-    prob_type = StringVar()
-    prob_type.set("--")
-    street_name = StringVar()
-    street_name.set("")
-    def register_entries():
-        entry_list = [{"Locality":str(locality),"Street":street_name.get(),"Problem":prob_type.get(),"Reporting Date":str(date.today())}]
-        nonlocal new_complaints_df
-        new_complaints_df = pd.concat([new_complaints_df,pd.DataFrame(entry_list)], ignore_index=True)
-        prob_type.set('--')
-        street_name.set('')
-    clerk_frame = Frame(window)
-    Label(clerk_frame, text="Choose the type of Problem ", font=('Courier New Greek',18)).pack(pady=20)
-    prob_menu = OptionMenu(clerk_frame,prob_type,"Pothole","Broken Curb","Others")
-    prob_menu.config(font=('Courier New Greek',15), width=18)
-    prob_menu.pack(anchor=CENTER, padx=70)
-    Label(clerk_frame, text="Enter the Street Name :", font=('Courier New Greek',18)).pack(pady=15)
-    street_entry = Entry(clerk_frame, textvariable=street_name, font=('Courier New Greek',15))
-    street_entry.pack()
-    Button(clerk_frame, text="Register", font=('Poppins bold', 18), command=register_entries).pack()
+def clerk_page(window, Database, locality):
+    new_complaints_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2]["new "+locality])
+
+    logout_img=Image.open('logout1.png')
+    logout_pic=ImageTk.PhotoImage(logout_img)
+
+    clerk_frame=Frame(window)
     clerk_frame.grid(row=0, column=0, sticky='nsew')
-    clerk_frame.tkraise()
+
+    header1=Listbox(clerk_frame, bg="#5cdb95", width=clerk_frame.winfo_screenwidth(), height=int(clerk_frame.winfo_screenheight()*0.01), borderwidth=0, highlightthickness=0)
+    header1.place(x=0,y=0)
+
+    title1=Label(header1, text="CLERK", bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
+    title1.place(x=header1.winfo_screenwidth()*0.4, y=header1.winfo_screenheight()*0.01)
 
     def exit():
         new_complaints_df.to_csv('temp.csv', index=False)
@@ -32,4 +24,52 @@ def clerk_page(window,Database,locality):
         file_obj.SetContentFile(filename='temp.csv')
         file_obj.Upload()
         clerk_frame.destroy()
-    Button(clerk_frame, text="Log Out", command=exit).pack()
+
+    logout_button1=Button(header1, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
+    logout_button1.image=logout_pic
+    logout_button1.place(x=header1.winfo_screenwidth()*0.9, y=header1.winfo_screenheight()*0.01)
+
+    centre1=Listbox(clerk_frame, bg="white", width=clerk_frame.winfo_screenwidth(), height=int(clerk_frame.winfo_screenheight()), borderwidth=0, highlightthickness=0)
+    centre1.place(x=0,y=clerk_frame.winfo_screenheight()*0.1)
+
+    form_box=Frame(centre1, bg="#05386B", borderwidth=0, highlightthickness=0, width=int(clerk_frame.winfo_screenwidth()*0.7), height=int(clerk_frame.winfo_screenheight()*0.7))
+    form_box.place(x=clerk_frame.winfo_screenwidth()*0.15, y=clerk_frame.winfo_screenheight()*0.1)
+
+    complaint_no_label=Label(form_box, text="New Complaint Form", bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 25))
+    complaint_no_label.place(x=form_box.winfo_screenwidth()*0.24, y=form_box.winfo_screenheight()*0.01)
+
+    locality_title=Label(form_box, text="Locality:", bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 20))
+    locality_title.place(x=form_box.winfo_screenwidth()*0.1, y=form_box.winfo_screenheight()*0.125)
+    locality_label=Label(form_box, text=locality, bg="#05386b", fg="white", font=("yu gothic ui", 20))
+    locality_label.place(x=form_box.winfo_screenwidth()*0.19, y=form_box.winfo_screenheight()*0.125)
+
+    street_title=Label(form_box, text="Street:", bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 20))
+    street_title.place(x=form_box.winfo_screenwidth()*0.1, y=form_box.winfo_screenheight()*0.3)
+    street_entry=Entry(form_box, bg="#05386b", fg="white", font=("yu gothic ui", 20), width=int(form_box.winfo_screenwidth()*0.01), highlightthickness=2, highlightcolor="white")
+    street_entry.place(x=form_box.winfo_screenwidth()*0.19, y=form_box.winfo_screenheight()*0.3)
+
+    problem_title=Label(form_box, text="Problem: ", bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 20))
+    problem_title.place(x=form_box.winfo_screenwidth()*0.4, y=form_box.winfo_screenheight()*0.3)
+    problem_options=["Potholes", "Broken Footpath", "Cracking", "Waterlogging", "Ravelling", "Road Rutting", "Uneven Road"]
+    problem_variable = StringVar()
+    problem_variable.set(problem_options[0])
+    problem_menu = OptionMenu(form_box, problem_variable, *problem_options)
+    problem_menu.config(highlightbackground="#05386B", highlightcolor="white", font=("yu gothic ui semibold", 17), fg="white", bg='#05386B', activebackground="#05386B", activeforeground="white")
+    pmenu=form_box.nametowidget(problem_menu.menuname)
+    pmenu.config(bg='#05386B', font=("yu gothic ui semibold", 17), fg="white", activebackground="black", activeforeground="white")
+    problem_menu.place(x=form_box.winfo_screenwidth()*0.49, y=form_box.winfo_screenheight()*0.3, width=int(form_box.winfo_screenwidth()*0.175), height=35)
+
+    reporting_date_text=Label(form_box, text="Reporting Date: ", bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 20))
+    reporting_date_text.place(x=form_box.winfo_screenwidth()*0.35, y=form_box.winfo_screenheight()*0.125)
+    reporting_date_label=Label(form_box, text=str(date.today()), bg="#05386b", fg="white", font=("yu gothic ui", 20))
+    reporting_date_label.place(x=form_box.winfo_screenwidth()*0.49, y=form_box.winfo_screenheight()*0.125)
+
+    def submit():
+        temp_dict=[{'Locality': locality, 'Street': street_entry.get(), 'Problem': problem_variable.get(), 'Reporting Date': str(date.today())}]
+        nonlocal new_complaints_df
+        new_complaints_df=pd.concat([new_complaints_df, pd.DataFrame(temp_dict)], ignore_index=True)
+        problem_variable.set(problem_options[0])
+        street_entry.delete(0, END)
+
+    submit_button=Button(form_box, text="Submit Complaint", bg="white", fg="#05386B", font=("yu gothic ui bold", 20), cursor="hand2", activebackground="white", activeforeground="#05386B", borderwidth=0, width=int(form_box.winfo_screenwidth()*0.0125), command=submit)
+    submit_button.place(x=form_box.winfo_screenwidth()*0.25, y=form_box.winfo_screenheight()*0.475)
