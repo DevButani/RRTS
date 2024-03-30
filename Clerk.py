@@ -6,7 +6,7 @@ from datetime import date
 def clerk_page(window, Database, locality):
     new_complaints_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2]["new "+locality])
 
-    logout_img=Image.open('logout1.png')
+    logout_img=Image.open('Images/logout1.png')
     logout_pic=ImageTk.PhotoImage(logout_img)
 
     clerk_frame=Frame(window)
@@ -57,11 +57,11 @@ def clerk_page(window, Database, locality):
     problem_menu.config(highlightbackground="#05386B", highlightcolor="white", font=("yu gothic ui semibold", 17), fg="white", bg='#05386B', activebackground="#05386B", activeforeground="white")
     pmenu=form_box.nametowidget(problem_menu.menuname)
     pmenu.config(bg='#05386B', font=("yu gothic ui semibold", 17), fg="white", activebackground="black", activeforeground="white")
-    problem_menu.place(x=form_box.winfo_screenwidth()*0.49, y=form_box.winfo_screenheight()*0.3, width=int(form_box.winfo_screenwidth()*0.175), height=35)
+    problem_menu.place(x=form_box.winfo_screenwidth()*0.49, y=form_box.winfo_screenheight()*0.3, width=int(form_box.winfo_screenwidth()*0.175), height=int(form_box.winfo_screenheight()*0.05))
 
     reporting_date_text=Label(form_box, text="Reporting Date: ", bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 20))
     reporting_date_text.place(x=form_box.winfo_screenwidth()*0.35, y=form_box.winfo_screenheight()*0.125)
-    reporting_date_label=Label(form_box, text=str(date.today()), bg="#05386b", fg="white", font=("yu gothic ui", 20))
+    reporting_date_label=Label(form_box, text=date.today().strftime("%d/%m/%Y"), bg="#05386b", fg="white", font=("yu gothic ui", 20))
     reporting_date_label.place(x=form_box.winfo_screenwidth()*0.49, y=form_box.winfo_screenheight()*0.125)
 
     def submit():
