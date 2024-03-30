@@ -1,12 +1,15 @@
 from tkinter import *
 from PIL import ImageTk, Image  # type "Pip install pillow" in your terminal to install ImageTk and Image module
 import pandas as pd
+pd.options.mode.chained_assignment = None
 import re
 from functools import partial
 from datetime import *
 
 def mayor_page(window,Database,locality_options):
     schedule_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2]["Schedule"])
+    completed_df=schedule_df[schedule_df['Status']=="Completed"]
+    completed_df['Completion Date']=pd.to_datetime(completed_df['Completion Date'], format='%Y-%m-%d')
     
     logout_img=Image.open('Images/logout1.png')
     logout_pic=ImageTk.PhotoImage(logout_img)
@@ -69,7 +72,7 @@ def mayor_page(window,Database,locality_options):
     stat105=Label(report1, bg="#05386b", fg="white", text="Problem: ", font=("yu gothic ui", 15))
     stat105.place(x=report1.winfo_screenwidth()*0.25, y=report1.winfo_screenheight()*0.125)    
 
-    problem_options=["Potholes", "Broken Footpath", "Cracking", "Waterlogging", "Ravelling", "Road rutting", "Uneven road"]
+    problem_options=["Potholes", "Broken Footpath", "Cracking", "Waterlogging", "Ravelling", "Road Rutting", "Uneven Road"]
     problem_variable1 = StringVar()
     problem_variable1.set("Any")
     problem_menu1 = OptionMenu(report1, problem_variable1, "Any", *problem_options)
@@ -79,6 +82,7 @@ def mayor_page(window,Database,locality_options):
     problem_menu1.place(x=report1.winfo_screenwidth()*0.325, y=report1.winfo_screenheight()*0.125, width=int(report1.winfo_screenwidth()*0.12), height=35)
 
     def getRepairs():
+        nonlocal completed_df
         start_str=from_date1.get()
         end_str=to_date1.get()
         try:
@@ -91,11 +95,15 @@ def mayor_page(window,Database,locality_options):
         except ValueError:
             stat103.config(text="Invalid Dates", fg='red')
             return
-        if (end_date-start_date).days <= 0:
+        if (end_date-start_date).days < 0:
             stat103.config(text="Invalid Dates", fg='red')
             return
         
-        stat106.config(text="Nice")
+        local_completed_df=completed_df
+        if locality_variable1.get() != "All": local_completed_df=local_completed_df[local_completed_df['Locality'] == locality_variable1.get()]
+        if problem_variable1.get() != "Any": local_completed_df=local_completed_df[local_completed_df['Problem'] == problem_variable1.get()]
+        completed_repairs=len(local_completed_df[(local_completed_df['Completion Date'] >= start_date) & (local_completed_df['Completion Date'] <= end_date)].index)
+        stat106.config(text=completed_repairs)
 
     get_result_button1=Button(report1, bg="white", fg="#05386b", text="Get", font=("yu gothic ui", 12), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", width=int(report1.winfo_screenwidth()*0.005), command=getRepairs)
     get_result_button1.place(x=report1.winfo_screenwidth()*0.485, y=report1.winfo_screenheight()*0.125)
@@ -135,7 +143,7 @@ def mayor_page(window,Database,locality_options):
     stat203=Label(report2, bg="#05386b", fg="white", text="", font=("yu gothic ui", 15))
     stat203.place(x=report2.winfo_screenwidth()*0.47, y=report2.winfo_screenheight()*0.05)
 
-    name_list={
+    resource_name_dict={
         "All": ["All"],
         "Raw Materials": ["Asphalt", "Bitumen", "Concrete"],
         "Machines": ["Bulldozer", "Road Roller", "Concrete Mixer", "Jackhammer"],
@@ -144,7 +152,7 @@ def mayor_page(window,Database,locality_options):
     def set_resource_names(type):
         menu = resource_name_menu1["menu"]
         menu.delete(0,"end")
-        for string in name_list[type]:
+        for string in resource_name_dict[type]:
             menu.add_command(label=string, command=lambda value=string: resource_name_variable1.set(value))
         resource_name_variable1.set("[select]")
 
@@ -172,6 +180,7 @@ def mayor_page(window,Database,locality_options):
     resource_name_menu1.place(x=report2.winfo_screenwidth()*0.35, y=report2.winfo_screenheight()*0.125, width=int(report2.winfo_screenwidth()*0.12), height=35)
 
     def getResourceUtil():
+        nonlocal completed_df
         start_str=from_date2.get()
         end_str=to_date2.get()
         try:
@@ -184,11 +193,18 @@ def mayor_page(window,Database,locality_options):
         except ValueError:
             stat203.config(text="Invalid Dates", fg='red')
             return
-        if (end_date-start_date).days <= 0:
+        if (end_date-start_date).days < 0:
             stat203.config(text="Invalid Dates", fg='red')
             return
+        if resource_name_variable1.get() == "[select]":
+            stat205.config(text="-")
+            return
         
-        stat205.config(text="Nice")
+        local_completed_df = completed_df[(completed_df['Completion Date'] >= start_date) & (completed_df['Completion Date'] <= end_date)]
+        resource_name_list = resource_name_dict["Raw Materials"] + resource_name_dict["Machines"] + resource_name_dict["Personnel"]
+        if resource_name_variable1.get() == "All": resources_utilized = sum([local_completed_df[x].sum() for x in resource_name_list])
+        else: resources_utilized = local_completed_df[resource_name_variable1.get()].sum()
+        stat205.config(text=resources_utilized)
 
     get_result_button2=Button(report2, bg="white", fg="#05386b", text="Get", font=("yu gothic ui", 12), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", width=int(report2.winfo_screenwidth()*0.005), command=getResourceUtil)
     get_result_button2.place(x=report2.winfo_screenwidth()*0.485, y=report2.winfo_screenheight()*0.125)
@@ -203,19 +219,22 @@ def mayor_page(window,Database,locality_options):
     separator_frame2=Frame(report3, bg="white", width=int(report3.winfo_screenwidth()*0.75), height=int(report3.winfo_screenheight()*0.001))
     separator_frame2.place(x=0, y=0)
 
+    pending_repairs=len(schedule_df[schedule_df['Status']=="Pending"].index)
+    in_progress_repairs=len(schedule_df[schedule_df['Status']=="In Progress"].index)
+
     stat301=Label(report3, bg="#05386b", fg="white", text="No. of currently outstanding Repairs: ", font=("yu gothic ui", 15))
     stat301.place(x=report3.winfo_screenwidth()*0.05, y=report3.winfo_screenheight()*0.05)
 
     stat302=Label(report3, bg="#05386b", fg="white", text="Pending: ", font=("yu gothic ui", 15))
     stat302.place(x=report3.winfo_screenwidth()*0.05, y=report3.winfo_screenheight()*0.125)
 
-    stat303=Label(report3, bg="#05386b", fg="#5cdb95", text="75", font=("yu gothic ui bold", 15), borderwidth=3, relief="ridge", width=int(report3.winfo_screenwidth()*0.008))
+    stat303=Label(report3, bg="#05386b", fg="#5cdb95", text=pending_repairs, font=("yu gothic ui bold", 15), borderwidth=3, relief="ridge", width=int(report3.winfo_screenwidth()*0.008))
     stat303.place(x=report3.winfo_screenwidth()*0.13, y=report3.winfo_screenheight()*0.124)
 
     stat304=Label(report3, bg="#05386b", fg="white", text="In Progress: ", font=("yu gothic ui", 15))
     stat304.place(x=report3.winfo_screenwidth()*0.3, y=report3.winfo_screenheight()*0.125)    
 
-    stat305=Label(report3, bg="#05386b", fg="#5cdb95", text="69", font=("yu gothic ui bold", 15), borderwidth=3, relief="ridge", width=int(report3.winfo_screenwidth()*0.008))
+    stat305=Label(report3, bg="#05386b", fg="#5cdb95", text=in_progress_repairs, font=("yu gothic ui bold", 15), borderwidth=3, relief="ridge", width=int(report3.winfo_screenwidth()*0.008))
     stat305.place(x=report3.winfo_screenwidth()*0.4, y=report3.winfo_screenheight()*0.124)
 
     def exit():
