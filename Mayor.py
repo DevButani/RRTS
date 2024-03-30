@@ -2,8 +2,6 @@ from tkinter import *
 from PIL import ImageTk, Image  # type "Pip install pillow" in your terminal to install ImageTk and Image module
 import pandas as pd
 pd.options.mode.chained_assignment = None
-import re
-from functools import partial
 from datetime import *
 
 def mayor_page(window,Database,locality_options):
@@ -201,8 +199,7 @@ def mayor_page(window,Database,locality_options):
             return
         
         local_completed_df = completed_df[(completed_df['Completion Date'] >= start_date) & (completed_df['Completion Date'] <= end_date)]
-        resource_name_list = resource_name_dict["Raw Materials"] + resource_name_dict["Machines"] + resource_name_dict["Personnel"]
-        if resource_name_variable1.get() == "All": resources_utilized = sum([local_completed_df[x].sum() for x in resource_name_list])
+        if resource_name_variable1.get() == "All": resources_utilized = sum([local_completed_df[x].sum() for x in resource_name_dict["Raw Materials"]+resource_name_dict["Machines"]+resource_name_dict["Personnel"]])
         else: resources_utilized = local_completed_df[resource_name_variable1.get()].sum()
         stat205.config(text=resources_utilized)
 
