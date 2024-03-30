@@ -85,11 +85,11 @@ def supervisor_page(window,Database,locality):
             problems.append(Label(status_canvas, text=display_df['Problem'][row] + " at " + display_df['Street'][row] + " | " + display_df['Reporting Date'][row] + " | Status: " + display_df['Status'][row], bg="#05386b", fg="white", font=("yu gothic ui", 15)))
         else:
             problems.append(Label(status_canvas, text=display_df['Problem'][row] + " at " + display_df['Street'][row] + " | " + display_df['Reporting Date'][row] + " | Status: " + display_df['Status'][row], bg="#05386b", fg="white", font=("yu gothic ui", 15)))
-        status_canvas.create_window(0, y+2.5, window=problems[row], anchor=NW)
-        status_button=Button(status_canvas, text="Change Status", bg="#05386b", fg="white", command=partial(change_status, row), border=0, highlightthickness=0, activebackground="#05386b", activeforeground="#5cdb95", font=("yu gothic ui", 15))
-        status_canvas.create_window(650, y+2.5, window=status_button, anchor=NW)
-        line_separator=Frame(status_canvas, width=int(status_canvas.winfo_screenheight()*1.1), height=2, bg="white")
-        status_canvas.create_window(0, y+50, window=line_separator, anchor=NW)
+        status_canvas.create_window(25, y+10, window=problems[row], anchor=NW)
+        status_button=Button(status_canvas, text="Change Status", bg="#05386b", fg="white", command=partial(change_status, row), activebackground="#05386b", activeforeground="#5cdb95", font=("yu gothic ui", 15))
+        status_canvas.create_window(675, y+2.5, window=status_button, anchor=NW)
+        line_separator=Frame(status_canvas, width=int(status_canvas.winfo_screenheight()*1.5), height=2, bg="white")
+        status_canvas.create_window(0, y+56, window=line_separator, anchor=NW)
         y += 60
 
     scrollbar = Scrollbar(status_canvas, orient=VERTICAL, command=status_canvas.yview)
@@ -130,6 +130,11 @@ def supervisor_page(window,Database,locality):
         street_label.config(text=new_complaints_df['Street'][complaint_no])
         problem_label.config(text=new_complaints_df['Problem'][complaint_no])
         reporting_date_label.config(text=new_complaints_df['Reporting Date'][complaint_no])
+        severity_menu.config(state='normal')
+        traffic_menu.config(state='normal')
+        resource_type_menu.config(state='normal')
+        resource_name_menu.config(state='normal')
+        submit_button.config(state='normal')
         nonlocal temp_dict
         temp_dict={'Locality': locality, 'Street': new_complaints_df['Street'][complaint_no], 'Problem': new_complaints_df['Problem'][complaint_no], 'Reporting Date': new_complaints_df['Reporting Date'][complaint_no], 'Severity': "Mild", 'Traffic': "Extreme", 'Asphalt': 0, 'Bitumen': 0, 'Concrete': 0, 'Bulldozer': 0, 'Road Roller': 0, 'Concrete Mixer': 0, 'Jackhammer': 0, 'Engineer': 0, 'Worker': 0, 'Machine Operator': 0, 'Status': "Pending", 'Completion Date': ""}
         fill_form[complaint_no].config(bg="white")
@@ -190,7 +195,7 @@ def supervisor_page(window,Database,locality):
     severity_title=Label(form_box, text="Severity: ", bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 17))
     severity_title.place(x=form_box.winfo_screenwidth()*0.03, y=form_box.winfo_screenheight()*0.275)
     severity_menu=OptionMenu(form_box, severity_selection, *severity_options)
-    severity_menu.config(highlightbackground="#05386B", highlightcolor="white", font=("yu gothic ui semibold", 12), fg="white", bg='#05386B', activebackground="#05386B", activeforeground="white")
+    severity_menu.config(highlightbackground="#05386B", highlightcolor="white", font=("yu gothic ui semibold", 12), fg="white", bg='#05386B', activebackground="#05386B", activeforeground="white", state='disabled')
     smenu=form_box.nametowidget(severity_menu.menuname)
     smenu.config(bg='#05386B', font=("yu gothic ui semibold", 12), fg="white", activebackground="black", activeforeground="white")
     severity_menu.place(x=form_box.winfo_screenwidth()*0.1, y=form_box.winfo_screenheight()*0.285, width=int(form_box.winfo_screenwidth()*0.1), height=35)
@@ -202,7 +207,7 @@ def supervisor_page(window,Database,locality):
     traffic_title=Label(form_box, text="Traffic\nLevel: ", bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 15))
     traffic_title.place(x=form_box.winfo_screenwidth()*0.27, y=form_box.winfo_screenheight()*0.275)
     traffic_menu=OptionMenu(form_box, traffic_selection, *traffic_options)
-    traffic_menu.config(highlightbackground="#05386B", highlightcolor="white", font=("yu gothic ui semibold", 12), fg="white", bg='#05386B', activebackground="#05386B", activeforeground="white")
+    traffic_menu.config(highlightbackground="#05386B", highlightcolor="white", font=("yu gothic ui semibold", 12), fg="white", bg='#05386B', activebackground="#05386B", activeforeground="white", state='disabled')
     tmenu1=form_box.nametowidget(traffic_menu.menuname)
     tmenu1.config(bg='#05386B', font=("yu gothic ui semibold", 12), fg="white", activebackground="black", activeforeground="white")
     traffic_menu.place(x=form_box.winfo_screenwidth()*0.335, y=form_box.winfo_screenheight()*0.285, width=int(form_box.winfo_screenwidth()*0.1), height=35)  
@@ -213,7 +218,7 @@ def supervisor_page(window,Database,locality):
     resource_req_title=Label(form_box, text="Resource Requirement: ", bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 17))
     resource_req_title.place(x=form_box.winfo_screenwidth()*0.03, y=form_box.winfo_screenheight()*0.375)
 
-    name_list={
+    resource_name_list={
                 "Raw Materials": ["Asphalt", "Bitumen", "Concrete"],
                 "Machines": ["Bulldozer", "Road Roller", "Concrete Mixer", "Jackhammer"],
                 "Personnel": ["Engineer", "Worker", "Machine Operator"]
@@ -229,7 +234,7 @@ def supervisor_page(window,Database,locality):
     def set_resource_names(type):
         menu=resource_name_menu["menu"]
         menu.delete(0,"end")
-        for string in name_list[type]:
+        for string in resource_name_list[type]:
             # menu.add_command(label=string, command=lambda value=string: resource_name_variable.set(value))
             menu.add_command(label=string, command=partial(unlock_entry, string))
         resource_name_variable.set("[select]")
@@ -242,7 +247,7 @@ def supervisor_page(window,Database,locality):
     resource_type_variable = StringVar()
     resource_type_variable.set("[select]")
     resource_type_menu = OptionMenu(form_box, resource_type_variable, *resource_type_options, command=set_resource_names)
-    resource_type_menu.config(highlightbackground="#05386B", highlightcolor="white", font=("yu gothic ui semibold", 12), fg="white", bg='#05386B', activebackground="#05386B", activeforeground="white")
+    resource_type_menu.config(highlightbackground="#05386B", highlightcolor="white", font=("yu gothic ui semibold", 12), fg="white", bg='#05386B', activebackground="#05386B", activeforeground="white", state='disabled')
     rtmenu=form_box.nametowidget(resource_type_menu.menuname)
     rtmenu.config(bg='#05386B', font=("yu gothic ui semibold", 12), fg="white", activebackground="black", activeforeground="white")
     resource_type_menu.place(x=form_box.winfo_screenwidth()*0.03, y=form_box.winfo_screenheight()*0.48, width=int(form_box.winfo_screenwidth()*0.125), height=35)
@@ -260,8 +265,8 @@ def supervisor_page(window,Database,locality):
 
     resource_name_variable = StringVar()
     resource_name_variable.set("[select]")
-    resource_name_menu = OptionMenu(form_box, resource_name_variable, "[select]","Hellos", command=unlock_entry)
-    resource_name_menu.config(highlightbackground="#05386B", highlightcolor="white", font=("yu gothic ui semibold", 12), fg="white", bg='#05386B', activebackground="#05386B", activeforeground="white")
+    resource_name_menu = OptionMenu(form_box, resource_name_variable, "[select]", command=unlock_entry)
+    resource_name_menu.config(highlightbackground="#05386B", highlightcolor="white", font=("yu gothic ui semibold", 12), fg="white", bg='#05386B', activebackground="#05386B", activeforeground="white", state='disabled')
     rnmenu=form_box.nametowidget(resource_name_menu.menuname)
     rnmenu.config(bg='#05386B', font=("yu gothic ui semibold", 12), fg="white", activebackground="black", activeforeground="white")
     resource_name_menu.place(x=form_box.winfo_screenwidth()*0.17, y=form_box.winfo_screenheight()*0.48, width=int(form_box.winfo_screenwidth()*0.125), height=35)
@@ -291,7 +296,7 @@ def supervisor_page(window,Database,locality):
         resource_type_variable.set("[select]")
         reload_sidebar()
 
-    submit_button=Button(form_box, text="Submit", bg="white", fg="#05386B", font=("yu gothic ui bold", 17), cursor="hand2", activebackground="white", activeforeground="#05386B", borderwidth=0, width=int(form_box.winfo_screenwidth()*0.007), command=submit)
+    submit_button=Button(form_box, text="Submit", bg="white", fg="#05386B", font=("yu gothic ui bold", 17), cursor="hand2", activebackground="white", activeforeground="#05386B", borderwidth=0, width=int(form_box.winfo_screenwidth()*0.007), command=submit, state='disabled')
     submit_button.place(x=form_box.winfo_screenwidth()*0.19, y=form_box.winfo_screenheight()*0.55)
 
     show_frame(complaints_frame)
