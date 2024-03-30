@@ -195,6 +195,16 @@ show_password.place(x=login_box1.winfo_screenwidth()*0.225, y=login_box1.winfo_s
 error_label1=Label(login_box1, text="", fg="red", bg="#05386B", font=("yu gothic ui", 11, 'bold'))
 error_label1.place(x=login_box1.winfo_screenwidth()*0.225, y=login_box1.winfo_screenheight()*0.4)
 
+def encrypt(password):
+    mod1 = 0
+    mod2 = 0
+    mod3 = 0
+    for i in range(len(password)):
+        mod1 = (mod1*97 + ord(password[i]) - 31) % (17)
+        mod2 = (mod2*97 + ord(password[i]) - 31) % int(1e9+7)
+        mod3 = (mod3*97 + ord(password[i]) - 31) % int((1e18+1)/(1e6+1))
+    return str(hex(mod1)) + str(hex(mod2)) + str(hex(mod3))
+
 # On pressing Login
 def loginUser():
     error_label1.config(text="")
@@ -202,7 +212,7 @@ def loginUser():
     password=password_entry1.get()
     global login_info_df
     idx=login_info_df[login_info_df['Email Id'] == email]
-    if len(idx)>0 and password==login_info_df['Password'][idx.index[0]]:
+    if len(idx)>0 and encrypt(password)==login_info_df['Password'][idx.index[0]]:
         if login_info_df['Authorized'][idx.index[0]]=='N':
             error_label1.config(text="Authorization Pending.\nPlease wait.")
         else:
@@ -530,7 +540,7 @@ def signUp():
         head.config(text="Error")
         condition4.config(text="• Confirm Password not \nsame as Password.", fg="red")
     if userIdValid and req[5] and confirm_password.get()==password1 and name_entry1.get().replace(" ",""):
-        temp_dict=[{'Type': type_variable.get(), 'Name': name_entry1.get(), 'Locality': locality_variable.get(), 'Email Id': emailId2.get().lower(), 'Password': password2.get(), 'Authorized': 'N'}]
+        temp_dict=[{'Type': type_variable.get(), 'Name': name_entry1.get(), 'Locality': locality_variable.get(), 'Email Id': emailId2.get().lower(), 'Password': encrypt(password2.get()), 'Authorized': 'N'}]
         temp_df=pd.DataFrame(temp_dict)
         login_info_df=pd.concat([login_info_df,temp_df], ignore_index=True)
         login_info_df.to_csv('temp.csv', index=False)
