@@ -125,7 +125,8 @@ def supervisor_page(window,Database,locality):
         fill_form[current_complaint_no].config(bg="#5cdb95")
         current_complaint_no=complaint_no
         # show_frame(complaints_frame)
-        complaint_no_label.config(text="Complaint No. XYZ123", fg="#5cdb95")
+        complaint_no_label.config(text="")
+        # complaint_no_label.config(text="Complaint No. XYZ123", fg="#5cdb95")
         locality_label.config(text=locality)
         street_label.config(text=new_complaints_df['Street'][complaint_no])
         problem_label.config(text=new_complaints_df['Problem'][complaint_no])
