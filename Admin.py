@@ -197,7 +197,7 @@ def admin_page(window, Database, login_info_df):
     resource_count_entry=Entry(box2, textvariable=resource_count_variable, bg="#05386b", fg="white", font=("yu gothic ui", 20), width=int(box2.winfo_screenwidth()*0.01), highlightthickness=2, highlightcolor="white")
     resource_count_entry.place(x=box2.winfo_screenwidth()*0.375, y=box2.winfo_screenheight()*0.3)
 
-    submit_button=Button(box2, text="Register Complaint", bg="white", fg="#05386B", font=("yu gothic ui bold", 20), cursor="hand2", activebackground="white", activeforeground="#05386B", borderwidth=0, width=int(box2.winfo_screenwidth()*0.0125), command=register_entries)
+    submit_button=Button(box2, text="Update Resource", bg="white", fg="#05386B", font=("yu gothic ui bold", 20), cursor="hand2", activebackground="white", activeforeground="#05386B", borderwidth=0, width=int(box2.winfo_screenwidth()*0.0125), command=register_entries)
     submit_button.place(x=box2.winfo_screenwidth()*0.25, y=box2.winfo_screenheight()*0.475)
 
     # authorize
