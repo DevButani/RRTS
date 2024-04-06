@@ -80,11 +80,7 @@ def supervisor_page(window,Database,locality):
     y = 0
     row_count=len(display_df.index)
     for row in range(row_count):
-
-        if row%2==0:
-            problems.append(Label(status_canvas, text=display_df['Problem'][row] + " at " + display_df['Street'][row] + " | " + display_df['Reporting Date'][row] + " | Status: " + display_df['Status'][row], bg="#05386b", fg="white", font=("yu gothic ui", 15)))
-        else:
-            problems.append(Label(status_canvas, text=display_df['Problem'][row] + " at " + display_df['Street'][row] + " | " + display_df['Reporting Date'][row] + " | Status: " + display_df['Status'][row], bg="#05386b", fg="white", font=("yu gothic ui", 15)))
+        problems.append(Label(status_canvas, text=display_df['Problem'][row] + " at " + display_df['Street'][row] + " | " + display_df['Reporting Date'][row] + " | Status: " + display_df['Status'][row], bg="#05386b", fg="white", font=("yu gothic ui", 15)))
         status_canvas.create_window(25, y+10, window=problems[row], anchor=NW)
         status_button=Button(status_canvas, text="Change Status", bg="#05386b", fg="white", command=partial(change_status, row), activebackground="#05386b", activeforeground="#5cdb95", font=("yu gothic ui", 15))
         status_canvas.create_window(675, y+2.5, window=status_button, anchor=NW)
@@ -124,7 +120,6 @@ def supervisor_page(window,Database,locality):
         nonlocal current_complaint_no, fill_form
         fill_form[current_complaint_no].config(bg="#5cdb95")
         current_complaint_no=complaint_no
-        # show_frame(complaints_frame)
         complaint_no_label.config(text="")
         # complaint_no_label.config(text="Complaint No. XYZ123", fg="#5cdb95")
         locality_label.config(text=locality)
@@ -150,8 +145,6 @@ def supervisor_page(window,Database,locality):
             fill_form=[]
             y = 0
             for i in range(no_of_complaints):
-                # problem = Label(new_complaints_canvas, text=new_complaints_df['Problem'][i]+" at "+new_complaints_df['Street'][i], bg="yellow", fg="red")
-                # new_complaints_canvas.create_window(0, y, window=problem, anchor=NW)
                 fill_form.append(Button(new_complaints_canvas, text=new_complaints_df['Problem'][i]+" at "+new_complaints_df['Street'][i], bg="#5cdb95", fg="black", activebackground="black", activeforeground="white", borderwidth=0, highlightthickness=0, font=("yu gothic ui", 15), width=int(side_bar1.winfo_screenwidth()*0.025), anchor=W, command=partial(show_form, i)))
                 new_complaints_canvas.create_window(0, y, window=fill_form[i], anchor=NW)
                 y += 40
@@ -236,7 +229,6 @@ def supervisor_page(window,Database,locality):
         menu=resource_name_menu["menu"]
         menu.delete(0,"end")
         for string in resource_name_list[type]:
-            # menu.add_command(label=string, command=lambda value=string: resource_name_variable.set(value))
             menu.add_command(label=string, command=partial(unlock_entry, string))
         resource_name_variable.set("[select]")
         resource_quantity_variable.set(0)

@@ -65,6 +65,8 @@ def clerk_page(window, Database, locality):
     reporting_date_label.place(x=form_box.winfo_screenwidth()*0.49, y=form_box.winfo_screenheight()*0.125)
 
     def submit():
+        if not street_entry.get().strip():
+            return
         temp_dict=[{'Locality': locality, 'Street': street_entry.get(), 'Problem': problem_variable.get(), 'Reporting Date': str(date.today())}]
         nonlocal new_complaints_df
         new_complaints_df=pd.concat([new_complaints_df, pd.DataFrame(temp_dict)], ignore_index=True)
