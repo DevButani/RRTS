@@ -1,12 +1,16 @@
 from tkinter import *
+from tkinter import messagebox
 from PIL import ImageTk, Image  # type "Pip install pillow" in your terminal to install ImageTk and Image module
 import pandas as pd
 from functools import partial
 
 def supervisor_page(window,Database,locality):
-    new_complaints_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2]["new "+locality])
-
-    complaints_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2][locality])
+    try:
+        new_complaints_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2]["new "+locality])
+        complaints_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2][locality])
+    except:
+        messagebox.showerror("Network Connection Failed", "Error while fetching data")
+        return
 
     display_df = complaints_df[(complaints_df['Status']=='In Progress')]
     complaints_df.drop(complaints_df[(complaints_df['Status']=='In Progress')].index, inplace=True)
@@ -30,20 +34,28 @@ def supervisor_page(window,Database,locality):
     #schedule report frame
 
     def exit():
-        nonlocal complaints_df, new_complaints_df
-        complaints_df = pd.concat([complaints_df, display_df], ignore_index=True)
-        complaints_df.to_csv('temp.csv', index=False)
-        file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2][locality]})
-        file_obj.SetContentFile(filename='temp.csv')
-        file_obj.Upload()
-        new_complaints_df.to_csv('temp.csv', index=False)
-        file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2]['new '+locality]})
-        file_obj.SetContentFile(filename='temp.csv')
-        file_obj.Upload()
+        try:
+            nonlocal complaints_df, new_complaints_df
+            complaints_df = pd.concat([complaints_df, display_df], ignore_index=True)
+            complaints_df.to_csv('temp.csv', index=False)
+            file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2][locality]})
+            file_obj.SetContentFile(filename='temp.csv')
+            file_obj.Upload()
+
+            new_complaints_df.to_csv('temp.csv', index=False)
+            file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2]['new '+locality]})
+            file_obj.SetContentFile(filename='temp.csv')
+            file_obj.Upload()
+
+        except:
+            file_obj.content.close()
+            confirm=messagebox.askokcancel("Network Connection Failed", "Log out while offline?\nAny changes made will not be saved", icon='warning')
+            if not confirm: return
+        
         schedule_report_frame.destroy()
         complaints_frame.destroy()
 
-    logout_img=Image.open('Images/logout1.png')
+    logout_img=Image.open('Images/logout.png')
     logout_pic=ImageTk.PhotoImage(logout_img)
 
     header1=Listbox(schedule_report_frame, bg="#5cdb95", width=schedule_report_frame.winfo_screenwidth(), height=int(schedule_report_frame.winfo_screenheight()*0.01), borderwidth=0, highlightthickness=0)

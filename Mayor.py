@@ -1,15 +1,20 @@
 from tkinter import *
+from tkinter import messagebox
 from PIL import ImageTk, Image  # type "Pip install pillow" in your terminal to install ImageTk and Image module
 import pandas as pd
 pd.options.mode.chained_assignment = None
 from datetime import *
 
 def mayor_page(window,Database,locality_options):
-    schedule_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2]["Schedule"])
+    try:
+        schedule_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2]["Schedule"])
+    except:
+        messagebox.showerror("Network Connection Failed", "Error while fetching data")
+        return
     completed_df=schedule_df[schedule_df['Status']=="Completed"]
     completed_df['Completion Date']=pd.to_datetime(completed_df['Completion Date'], format='%Y-%m-%d')
     
-    logout_img=Image.open('Images/logout1.png')
+    logout_img=Image.open('Images/logout.png')
     logout_pic=ImageTk.PhotoImage(logout_img)
 
     mayor_frame=Frame(window)

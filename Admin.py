@@ -1,13 +1,17 @@
 import pandas as pd
 from tkinter import *
+from tkinter import messagebox
 from PIL import ImageTk, Image
-#import numpy as np
+import os
 from functools import partial
 from datetime import date
 
 def admin_page(window, Database, login_info_df):
-
-    resources_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2]["Resources"])
+    try:
+        resources_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2]["Resources"])
+    except:
+        messagebox.showerror("Network Connection Failed", "Error while fetching data")
+        return
     unauthorized_df=login_info_df[login_info_df['Authorized']=='N']
     authorized_df=login_info_df[login_info_df['Authorized']=='Y']
     login_info_df.drop(login_info_df[login_info_df['Authorized']!='-'].index, inplace=True)
@@ -29,25 +33,32 @@ def admin_page(window, Database, login_info_df):
         frame.tkraise()
 
     def exit():
-        nonlocal login_info_df, unauthorized_df
-        if resources_updated:
-            resources_df.to_csv('temp.csv', index=False)
-            file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2]["Resources"]})
-            file_obj.SetContentFile(filename='temp.csv')
-            file_obj.Upload()
+        try:
+            nonlocal login_info_df, unauthorized_df
+            if resources_updated:
+                resources_df.to_csv('temp.csv', index=False)
+                file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2]["Resources"]})
+                file_obj.SetContentFile(filename='temp.csv')
+                file_obj.Upload()
 
-        login_info_df = pd.concat([login_info_df,unauthorized_df], ignore_index=True)
-        login_info_df.to_csv('temp.csv', index=False)
-        if login_info_updated:
-            file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2]["Login Info"]})
-            file_obj.SetContentFile(filename='temp.csv')
-            file_obj.Upload()
-        
+            login_info_df = pd.concat([login_info_df,unauthorized_df], ignore_index=True)
+            login_info_df.to_csv('temp.csv', index=False)
+            if login_info_updated:
+                file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2]["Login Info"]})
+                file_obj.SetContentFile(filename='temp.csv')
+                file_obj.Upload()
+            
+        except:
+            file_obj.content.close()
+            confirm=messagebox.askokcancel("Network Connection Failed", "Log out while offline?\nAny changes made will not be saved", icon='warning')
+            if os.path.exists('temp.csv'): os.remove('temp.csv')
+            if not confirm: return
+
         resource_check_frame.destroy()
         resource_update_frame.destroy()
         authorization_frame.destroy()
 
-    logout_img=Image.open('Images/logout1.png')
+    logout_img=Image.open('Images/logout.png')
     logout_pic=ImageTk.PhotoImage(logout_img)
 
     header1=Listbox(resource_check_frame, bg="#5cdb95", width=resource_check_frame.winfo_screenwidth(), height=int(resource_check_frame.winfo_screenheight()*0.01), borderwidth=0, highlightthickness=0)

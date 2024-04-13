@@ -6,26 +6,55 @@ from datetime import *
 from functools import cmp_to_key
 
 # get authorization
-gauth = GoogleAuth()
-gauth.LoadCredentialsFile("credentials.json")
-if gauth.credentials is None:
-    gauth.LocalWebserverAuth()
-elif gauth.access_token_expired:
-    gauth.Refresh()
-else:
-    gauth.Authorize()
+try:
+    gauth = GoogleAuth()
+    gauth.LoadCredentialsFile("credentials.json")
+    if gauth.credentials is None:
+        gauth.LocalWebserverAuth()
+    elif gauth.access_token_expired:
+        gauth.Refresh()
+    else:
+        gauth.Authorize()
 
-gauth.SaveCredentialsFile("credentials.json")
+    gauth.SaveCredentialsFile("credentials.json")
+
+except:
+    print("Network connection failed")
+    exit()
 
 drive = GoogleDrive(gauth)
 
 # retrieve database
-database_folder = '1H5CUI-DRExlAleJwr0P_jlwh5c_GUJem'
-links_file = '1i-PIzY2z8a0V7QKijE5zBI4bqPng749O'
-links_df = pd.read_csv('https://drive.google.com/uc?id='+links_file)
+system_specs_df = pd.read_csv('system_specs.csv')
+database_folder = ''
+
+if len(system_specs_df.index) == 0:
+    for folder in drive.ListFile({"q": "mimeType='application/vnd.google-apps.folder' and trashed=false"}).GetList():
+        if folder['title'] == "RRTS": database_folder = folder['id']
+    if database_folder == '': 
+        print("System set-up required")
+        exit()
+    for file in drive.ListFile({'q': "'"+database_folder+"' in parents and trashed=false"}).GetList():
+        if file['title'] == "System Specs.csv": 
+            file_obj = drive.CreateFile({'parents': [{'id': database_folder}], 'id': file['id']})
+            file_obj.GetContentFile(filename='system_specs.csv')
+            system_specs_df = pd.read_csv('system_specs.csv')
+            break
+
+else: 
+    database_folder = system_specs_df['Folder'][0]
+
+links_file = system_specs_df['Links_file'][0]
+try:
+    links_df = pd.read_csv('https://drive.google.com/uc?id='+links_file)
+except:
+    print("Network connection failed")
+    exit()
+
 database_file = {}
 for i in range(len(links_df.index)):
     database_file[links_df['File'][i]] = links_df['Link'][i]
+
 localities_list = [x for x in links_df['File'].to_list() if(x[:3]!="new" and x not in ["Schedule", "Resources", "Login Info"])]
 
 # map categories to values
@@ -37,16 +66,24 @@ while True:
     current_date = date.today()
     current_time = datetime.now()
 
-    # schedule tasks every 5 min
-    sleep((5 - current_time.minute % 5)*60 - current_time.second)
+    # schedule tasks every 10 min (assuming 10 min day cycles)
+    sleep((10 - current_time.minute % 10)*60 - current_time.second)
 
     # get complaints
     complaints_df = pd.DataFrame(columns=['Locality','Street','Problem','Reporting Date','Severity','Traffic','Asphalt','Bitumen','Concrete','Bulldozer','Road Roller','Concrete Mixer','Jackhammer','Engineer','Worker','Machine Operator','Status','Completion Date'])
-    for locality in localities_list:
-        complaints_df = pd.concat([complaints_df,pd.read_csv('https://drive.google.com/uc?id='+database_file[locality])], ignore_index=True)
+    try:
+        for locality in localities_list:
+            complaints_df = pd.concat([complaints_df,pd.read_csv('https://drive.google.com/uc?id='+database_file[locality])], ignore_index=True)
+    except:
+        print("Network connection failed")
+        exit()
 
     # get resources
-    resources_df = pd.read_csv('https://drive.google.com/uc?id='+database_file['Resources'])
+    try:
+        resources_df = pd.read_csv('https://drive.google.com/uc?id='+database_file['Resources'])
+    except:
+        print("Network connection failed")
+        exit()
     resources_available = {}
     resources_count = len(resources_df.index)
     for indx in range(resources_count):
@@ -144,19 +181,24 @@ while True:
         resources_df.at[indx, 'In Use'] = resources_df['Units Available'][indx] - resources_available[resources_df['Name'][indx]]
 
     # push changes to the databases
-    file_obj = drive.CreateFile({'parents': [{'id': database_folder}], 'id': database_file['Resources']})
-    resources_df.to_csv('temp.csv', index=False)
-    file_obj.SetContentFile(filename='temp.csv')
-    file_obj.Upload()
-    
-    complaints_df = pd.concat([complaints_df,pending_complaints_df], ignore_index=True)
-    complaints_df = pd.concat([complaints_df,in_progress_tasks_df], ignore_index=True)
-    file_obj = drive.CreateFile({'parents': [{'id': database_folder}], 'id': database_file['Schedule']})
-    complaints_df.to_csv('temp.csv', index=False)
-    file_obj.SetContentFile(filename='temp.csv')
-    file_obj.Upload()
-    for locality in localities_list:
-        file_obj = drive.CreateFile({'parents': [{'id': database_folder}], 'id': database_file[locality]})
-        complaints_df[complaints_df['Locality']==locality].to_csv('temp.csv', index=False)
+    try:
+        file_obj = drive.CreateFile({'parents': [{'id': database_folder}], 'id': database_file['Resources']})
+        resources_df.to_csv('temp.csv', index=False)
         file_obj.SetContentFile(filename='temp.csv')
         file_obj.Upload()
+        
+        complaints_df = pd.concat([complaints_df,pending_complaints_df], ignore_index=True)
+        complaints_df = pd.concat([complaints_df,in_progress_tasks_df], ignore_index=True)
+        file_obj = drive.CreateFile({'parents': [{'id': database_folder}], 'id': database_file['Schedule']})
+        complaints_df.to_csv('temp.csv', index=False)
+        file_obj.SetContentFile(filename='temp.csv')
+        file_obj.Upload()
+        for locality in localities_list:
+            file_obj = drive.CreateFile({'parents': [{'id': database_folder}], 'id': database_file[locality]})
+            complaints_df[complaints_df['Locality']==locality].to_csv('temp.csv', index=False)
+            file_obj.SetContentFile(filename='temp.csv')
+            file_obj.Upload()
+            
+    except:
+        print("Network connection failed")
+        exit()

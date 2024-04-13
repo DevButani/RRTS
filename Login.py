@@ -2,6 +2,7 @@ from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 from tkinter import *
 from PIL import ImageTk, Image  # type "Pip install pillow" in your terminal to install ImageTk and Image module
+import os
 import re
 import pandas as pd
 from time import strftime
@@ -49,16 +50,25 @@ else:
     database_folder = system_specs_df['Folder'][0]
 
 links_file = system_specs_df['Links_file'][0]
-links_df = pd.read_csv('https://drive.google.com/uc?id='+links_file)
+try:
+    links_df = pd.read_csv('https://drive.google.com/uc?id='+links_file)
+except:
+    print("Network connection failed")
+    exit()
+
 database_file = {}
 for i in range(len(links_df.index)):
     database_file[links_df['File'][i]] = links_df['Link'][i]
 
 Database = (drive,database_folder,database_file)
 
-file_obj = drive.CreateFile({'parents': [{'id': database_folder}], 'id': database_file["Login Info"]})
-file_obj.GetContentFile(filename='temp.csv')
-login_info_df=pd.read_csv('temp.csv')
+try:
+    file_obj = drive.CreateFile({'parents': [{'id': database_folder}], 'id': database_file["Login Info"]})
+    file_obj.GetContentFile(filename='temp.csv')
+    login_info_df=pd.read_csv('temp.csv')
+except:
+    print("Network connection failed")
+    exit()
 
 # Get today's date
 today = datetime.date.today()
@@ -94,6 +104,8 @@ window.columnconfigure(0, weight=1)
 window.state('zoomed')
 window.resizable(0, 0)
 window.title('Road Repair and Tracking Software')
+photo = PhotoImage(file = "Images/icon.png")
+window.iconphoto(True, photo)
 
 
 LoginPage = Frame(window)
@@ -116,7 +128,7 @@ side_bar1.place(x=0,y=0)
 central_frame1 = Frame(LoginPage, bg="white", height=window.winfo_screenheight(), width=window.winfo_screenwidth()*0.8)
 central_frame1.place(x=window.winfo_screenwidth()*0.2, y=0)
 
-bg_img1 = Image.open('Images/bg0.png')
+bg_img1 = Image.open('Images/bg.png')
 bg_pic1 = ImageTk.PhotoImage(bg_img1)
 
 bg_label1 = Label(side_bar1, image=bg_pic1, bg="black", width=window.winfo_screenwidth()*0.2, height=window.winfo_screenheight())
@@ -182,7 +194,7 @@ date_icon_label1.place(x=login_box1.winfo_screenwidth()*0.025, y=login_box1.winf
 date_label1 = Label(login_box1, text=day_of_week+" \n"+month+" "+day_of_month+" \n"+year, fg="white", bg="#05386B", font=('calibri', 15, 'bold'))
 date_label1.place(x=login_box1.winfo_screenwidth()*0.055, y=login_box1.winfo_screenheight()*0.275)
 
-email_icon1 = Image.open('Images/email1.png')
+email_icon1 = Image.open('Images/email.png')
 email_pic = ImageTk.PhotoImage(email_icon1)
 emailIcon_label1 = Label(login_box1, image=email_pic, bg='#05386B')
 emailIcon_label1.image = email_pic
@@ -193,7 +205,7 @@ email_entry1.place(x=login_box1.winfo_screenwidth()*0.225, y=login_box1.winfo_sc
 email_label1 = Label(login_box1, text="• Email Id", fg="white", bg="#05386B", font=("yu gothic ui", 15, "bold"))
 email_label1.place(x=login_box1.winfo_screenwidth()*0.225, y=login_box1.winfo_screenheight()*0.16)
 
-password_icon1 = Image.open('Images/password1.png')
+password_icon1 = Image.open('Images/password.png')
 password_pic = ImageTk.PhotoImage(password_icon1)
 password_icon_label1 = Label(login_box1, image=password_pic, bg='#05386B')
 password_icon_label1.image = password_pic
@@ -251,7 +263,7 @@ def loginUser():
                 Supervisor.supervisor_page(window,Database,userLocality)
             elif userType=="Admin":
                 Admin.admin_page(window,Database,login_info_df)
-                login_info_df=pd.read_csv('temp.csv')
+                if os.path.exists('temp.csv'): login_info_df=pd.read_csv('temp.csv')
             else:
                 Mayor.mayor_page(window,Database,locality_options)
     else:
@@ -274,7 +286,7 @@ side_bar2.place(x=0,y=0)
 central_frame2=Frame(SignupPage, bg="white", height=window.winfo_screenheight(), width=window.winfo_screenwidth()*0.8)
 central_frame2.place(x=window.winfo_screenwidth()*0.2, y=0)
 
-bg_img2 = Image.open('Images/bg0.png')
+bg_img2 = Image.open('Images/bg.png')
 bg_pic2 = ImageTk.PhotoImage(bg_img2)
 
 bg_label2=Label(side_bar2, image=bg_pic2, bg="black", width=window.winfo_screenwidth()*0.2, height=window.winfo_screenheight())
@@ -596,3 +608,5 @@ signup_button_down.place(x=login_box2.winfo_screenwidth()*0.25, y=login_box2.win
 show_page(LoginPage)
 
 window.mainloop()
+
+if os.path.exists('temp.csv'): os.remove('temp.csv')
