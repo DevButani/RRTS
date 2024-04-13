@@ -11,21 +11,44 @@ import Supervisor
 import Admin
 import Mayor
 
-gauth = GoogleAuth()
-gauth.LoadCredentialsFile("credentials.json")
-if gauth.credentials is None:
-    gauth.LocalWebserverAuth()
-elif gauth.access_token_expired:
-    gauth.Refresh()
-else:
-    gauth.Authorize()
+try:
+    gauth = GoogleAuth()
+    gauth.LoadCredentialsFile("credentials.json")
+    if gauth.credentials is None:
+        gauth.LocalWebserverAuth()
+    elif gauth.access_token_expired:
+        gauth.Refresh()
+    else:
+        gauth.Authorize()
 
-gauth.SaveCredentialsFile("credentials.json")
+    gauth.SaveCredentialsFile("credentials.json")
+
+except:
+    print("Network connection failed")
+    exit()
 
 drive = GoogleDrive(gauth)
 
-database_folder = '1H5CUI-DRExlAleJwr0P_jlwh5c_GUJem'
-links_file = '1i-PIzY2z8a0V7QKijE5zBI4bqPng749O'
+system_specs_df = pd.read_csv('system_specs.csv')
+database_folder = ''
+
+if len(system_specs_df.index) == 0:
+    for folder in drive.ListFile({"q": "mimeType='application/vnd.google-apps.folder' and trashed=false"}).GetList():
+        if folder['title'] == "RRTS": database_folder = folder['id']
+    if database_folder == '': 
+        print("System set-up required")
+        exit()
+    for file in drive.ListFile({'q': "'"+database_folder+"' in parents and trashed=false"}).GetList():
+        if file['title'] == "System Specs.csv": 
+            file_obj = drive.CreateFile({'parents': [{'id': database_folder}], 'id': file['id']})
+            file_obj.GetContentFile(filename='system_specs.csv')
+            system_specs_df = pd.read_csv('system_specs.csv')
+            break
+
+else: 
+    database_folder = system_specs_df['Folder'][0]
+
+links_file = system_specs_df['Links_file'][0]
 links_df = pd.read_csv('https://drive.google.com/uc?id='+links_file)
 database_file = {}
 for i in range(len(links_df.index)):
