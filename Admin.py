@@ -58,8 +58,14 @@ def admin_page(window, Database, login_info_df):
         resource_update_frame.destroy()
         authorization_frame.destroy()
 
+    def refresh():
+        pass
+
     logout_img=Image.open('Images/logout.png')
     logout_pic=ImageTk.PhotoImage(logout_img)
+
+    refresh_img=Image.open('Images/refresh.png')
+    refresh_pic=ImageTk.PhotoImage(refresh_img)
 
     header1=Listbox(resource_check_frame, bg="#5cdb95", width=resource_check_frame.winfo_screenwidth(), height=int(resource_check_frame.winfo_screenheight()*0.01), borderwidth=0, highlightthickness=0)
     header1.place(x=0,y=0)
@@ -70,6 +76,10 @@ def admin_page(window, Database, login_info_df):
     logout_button1=Button(header1, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
     logout_button1.image=logout_pic
     logout_button1.place(x=header1.winfo_screenwidth()*0.9, y=header1.winfo_screenheight()*0.01)
+
+    refresh_button1=Button(header1, text="Refresh  ", image=refresh_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=refresh)
+    refresh_button1.image=refresh_pic
+    refresh_button1.place(x=header1.winfo_screenwidth()*0.8, y=header1.winfo_screenheight()*0.01)
 
     resource_check_button1=Button(header1, text="Check Resources", bg="white", fg="#05386b", cursor="hand2", font=("yu gothic ui bold", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b")
     resource_check_button1.place(x=header1.winfo_screenwidth()*0.01, y=header1.winfo_screenheight()*0.055)
