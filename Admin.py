@@ -184,6 +184,7 @@ def admin_page(window, Database, login_info_df):
         nonlocal resources_updated
         resources_updated = True
         resources_df.iloc[((resources_df['Resource Type']==resource_type_variable.get()) & (resources_df['Name']==resource_name_variable.get())),2]=resource_count_variable.get()
+        set_label.config(text=resource_name_variable.get()+" set to "+str(resource_count_variable.get()))
         resource_type_variable.set("[select]")
         resource_name_variable.set("[select]")
         resource_count_variable.set(0)
@@ -194,6 +195,7 @@ def admin_page(window, Database, login_info_df):
         for string in resource_name_dict[type]:
             menu.add_command(label=string, command=lambda value=string: resource_name_variable.set(value))
         resource_name_variable.set("[select]")
+        set_label.config(text="")
 
     resource_type_label=Label(box2, bg="#05386b", fg="#5cdb95", text="Resource Type: ", font=("yu gothic ui", 20))
     resource_type_label.place(x=box2.winfo_screenwidth()*0.01, y=box2.winfo_screenheight()*0.125)
@@ -227,6 +229,9 @@ def admin_page(window, Database, login_info_df):
 
     submit_button=Button(box2, text="Update Resource", bg="white", fg="#05386B", font=("yu gothic ui bold", 20), cursor="hand2", activebackground="white", activeforeground="#05386B", borderwidth=0, width=int(box2.winfo_screenwidth()*0.0125), command=register_entries)
     submit_button.place(x=box2.winfo_screenwidth()*0.25, y=box2.winfo_screenheight()*0.475)
+
+    set_label=Label(box2, text="", bg="#05386b", fg="green", font=("yu gothic ui bold", 20))
+    set_label.place(x=box2.winfo_screenwidth()*0.25, y=box2.winfo_screenheight()*0.55)
 
     # authorize
 
