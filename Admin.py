@@ -77,9 +77,9 @@ def admin_page(window, Database, login_info_df):
     logout_button1.image=logout_pic
     logout_button1.place(x=header1.winfo_screenwidth()*0.9, y=header1.winfo_screenheight()*0.01)
 
-    refresh_button1=Button(header1, text="Refresh  ", image=refresh_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=refresh)
+    refresh_button1=Button(header1, text="Sync-changes  ", image=refresh_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=refresh)
     refresh_button1.image=refresh_pic
-    refresh_button1.place(x=header1.winfo_screenwidth()*0.8, y=header1.winfo_screenheight()*0.01)
+    refresh_button1.place(x=header1.winfo_screenwidth()*0.75, y=header1.winfo_screenheight()*0.01)
 
     resource_check_button1=Button(header1, text="Check Resources", bg="white", fg="#05386b", cursor="hand2", font=("yu gothic ui bold", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b")
     resource_check_button1.place(x=header1.winfo_screenwidth()*0.01, y=header1.winfo_screenheight()*0.055)
@@ -151,6 +151,10 @@ def admin_page(window, Database, login_info_df):
     logout_button2=Button(header2, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
     logout_button2.image=logout_pic
     logout_button2.place(x=header2.winfo_screenwidth()*0.9, y=header2.winfo_screenheight()*0.01)
+
+    refresh_button2=Button(header2, text="Sync-changes  ", image=refresh_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=refresh)
+    refresh_button2.image=refresh_pic
+    refresh_button2.place(x=header2.winfo_screenwidth()*0.75, y=header2.winfo_screenheight()*0.01)
 
     resource_check_button2=Button(header2, text="Check Resources", bg="#5cdb95", fg="#05386b", cursor="hand2", font=("yu gothic ui bold", 15), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", command=lambda: show_frame(resource_check_frame))
     resource_check_button2.place(x=header2.winfo_screenwidth()*0.01, y=header2.winfo_screenheight()*0.055)
@@ -232,6 +236,10 @@ def admin_page(window, Database, login_info_df):
     logout_button3=Button(header3, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
     logout_button3.image=logout_pic
     logout_button3.place(x=header3.winfo_screenwidth()*0.9, y=header3.winfo_screenheight()*0.01)
+
+    refresh_button3=Button(header3, text="Sync-changes  ", image=refresh_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=refresh)
+    refresh_button3.image=refresh_pic
+    refresh_button3.place(x=header3.winfo_screenwidth()*0.75, y=header3.winfo_screenheight()*0.01)
 
     resource_check_button3=Button(header3, text="Check Resources", bg="#5cdb95", fg="#05386b", cursor="hand2", font=("yu gothic ui bold", 15), borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", command=lambda: show_frame(resource_check_frame))
     resource_check_button3.place(x=header3.winfo_screenwidth()*0.01, y=header3.winfo_screenheight()*0.055)
