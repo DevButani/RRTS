@@ -275,9 +275,9 @@ def admin_page(window, Database, login_info_df):
     row_count=len(unauthorized_df.index)
     for row in range(row_count):
         records.append(Label(authorization_canvas, text=unauthorized_df['Locality'][row] + " | " + unauthorized_df['Type'][row] + " | " + unauthorized_df['Name'][row] + " | " + unauthorized_df['Email Id'][row] + " | Status: " + unauthorized_df['Authorized'][row], bg="#05386b", fg="white", font=("yu gothic ui", 15)))
-        authorization_canvas.create_window(0, y+2.5, window=records[row], anchor=NW)
+        authorization_canvas.create_window(authorization_canvas.winfo_screenwidth()*0.01, y+2.5, window=records[row], anchor=NW)
         status_button=Button(authorization_canvas, text="Change Status", bg="#05386b", fg="white", command=partial(change_status, row), border=0, highlightthickness=0, activebackground="#05386b", activeforeground="#5cdb95", font=("yu gothic ui", 15))
-        authorization_canvas.create_window(650, y+2.5, window=status_button, anchor=NW)
+        authorization_canvas.create_window(authorization_canvas.winfo_screenwidth()*0.55, y+2.5, window=status_button, anchor=NW)
         line_separator=Frame(authorization_canvas, width=int(authorization_canvas.winfo_screenheight()*1.1), height=2, bg="white")
         authorization_canvas.create_window(0, y+50, window=line_separator, anchor=NW)
         y += 60

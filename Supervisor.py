@@ -109,9 +109,9 @@ def supervisor_page(window,Database,locality):
     row_count=len(display_df.index)
     for row in range(row_count):
         problems.append(Label(status_canvas, text=display_df['Problem'][row] + " at " + display_df['Street'][row] + " | " + display_df['Reporting Date'][row] + " | Status: " + display_df['Status'][row], bg="#05386b", fg="white", font=("yu gothic ui", 15)))
-        status_canvas.create_window(25, y+10, window=problems[row], anchor=NW)
+        status_canvas.create_window(status_canvas.winfo_screenwidth()*0.01, y+10, window=problems[row], anchor=NW)
         status_button=Button(status_canvas, text="Change Status", bg="#05386b", fg="white", command=partial(change_status, row), activebackground="#05386b", activeforeground="#5cdb95", font=("yu gothic ui", 15))
-        status_canvas.create_window(675, y+2.5, window=status_button, anchor=NW)
+        status_canvas.create_window(status_canvas.winfo_screenwidth()*0.55, y+2.5, window=status_button, anchor=NW)
         line_separator=Frame(status_canvas, width=int(status_canvas.winfo_screenheight()*1.5), height=2, bg="white")
         status_canvas.create_window(0, y+56, window=line_separator, anchor=NW)
         y += 60
