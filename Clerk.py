@@ -76,9 +76,14 @@ def clerk_page(window, Database, locality):
     reporting_date_label=Label(form_box, text=date.today().strftime("%d/%m/%Y"), bg="#05386b", fg="white", font=("yu gothic ui", 20))
     reporting_date_label.place(x=form_box.winfo_screenwidth()*0.49, y=form_box.winfo_screenheight()*0.125)
 
+    error_label=Label(form_box, text="", bg="#05386b", fg="red", font=("yu gothic ui bold", 20))
+    error_label.place(x=form_box.winfo_screenwidth()*0.265, y=form_box.winfo_screenheight()*0.6)
+
     def submit():
         if not street_entry.get().strip():
+            error_label.config(text="Street field is empty.")
             return
+        error_label.config(text="")
         temp_dict=[{'Locality': locality, 'Street': street_entry.get(), 'Problem': problem_variable.get(), 'Reporting Date': str(date.today())}]
         nonlocal new_complaints_df
         new_complaints_df=pd.concat([new_complaints_df, pd.DataFrame(temp_dict)], ignore_index=True)
