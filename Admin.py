@@ -26,6 +26,8 @@ def admin_page(window, Database, login_info_df):
     resource_update_frame=Frame(window)
     authorization_frame=Frame(window)
 
+    window.overrideredirect(True)
+
     for frame in (resource_check_frame, resource_update_frame, authorization_frame):
         frame.grid(row=0,column=0, sticky='nsew')
 
@@ -57,6 +59,7 @@ def admin_page(window, Database, login_info_df):
         resource_check_frame.destroy()
         resource_update_frame.destroy()
         authorization_frame.destroy()
+        window.overrideredirect(False)
 
     def refresh():
         pass
