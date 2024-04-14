@@ -17,6 +17,8 @@ def mayor_page(window,Database,locality_options):
     logout_img=Image.open('Images/logout.png')
     logout_pic=ImageTk.PhotoImage(logout_img)
 
+    window.overrideredirect(True)
+
     mayor_frame=Frame(window)
     mayor_frame.grid(row=0, column=0, sticky='nsew')
 
@@ -240,6 +242,7 @@ def mayor_page(window,Database,locality_options):
 
     def exit():
         mayor_frame.destroy()
+        window.overrideredirect(False)
 
     logout_button1=Button(header1, text="Log Out  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
     logout_button1.image=logout_pic

@@ -22,6 +22,8 @@ def supervisor_page(window,Database,locality):
     current_complaint_no=0
     temp_dict={}
 
+    window.overrideredirect(True)
+
     schedule_report_frame=Frame(window)
     complaints_frame=Frame(window)
 
@@ -54,6 +56,7 @@ def supervisor_page(window,Database,locality):
         
         schedule_report_frame.destroy()
         complaints_frame.destroy()
+        window.overrideredirect(False)
 
     def refresh():
         pass

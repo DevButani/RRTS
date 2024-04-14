@@ -5,6 +5,9 @@ import pandas as pd
 from datetime import date
 
 def clerk_page(window, Database, locality):
+
+    window.overrideredirect(True)
+
     new_complaints_df = pd.DataFrame(columns=['Locality','Street','Problem','Reporting Date'])
 
     logout_img=Image.open('Images/logout.png')
@@ -32,6 +35,7 @@ def clerk_page(window, Database, locality):
                 confirm=messagebox.askokcancel("Network Connection Failed", "Log out while offline?\nAny changes made will not be saved", icon='warning')
                 if not confirm: return
         clerk_frame.destroy()
+        window.overrideredirect(False)
 
     logout_button1=Button(header1, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
     logout_button1.image=logout_pic
