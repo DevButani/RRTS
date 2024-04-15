@@ -365,6 +365,8 @@ def supervisor_page(window,Database,locality):
     
     def submit():
         nonlocal pending_complaints_df, complaints_df, new_complaints_df, current_complaint_no, temp_dict
+        temp_dict["Severity"]=severity_selection.get()
+        temp_dict["Traffic"]=traffic_selection.get()
         temp_dict_list=[temp_dict]
         temp_df=pd.DataFrame(temp_dict_list)
         pending_complaints_df = pd.concat([pending_complaints_df, temp_df], ignore_index=True)
