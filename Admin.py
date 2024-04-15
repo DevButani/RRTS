@@ -98,7 +98,7 @@ def admin_page(window, Database, login_info_df):
 
     title1=Label(header1, image=logo_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
     title1.image=logo_pic
-    title1.place(x=header1.winfo_screenwidth()*0.45, y=header1.winfo_screenheight()*0.005)
+    title1.place(x=header1.winfo_screenwidth()*0.45, y=header1.winfo_screenheight()*0.003)
 
     logout_button1=Button(header1, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
     logout_button1.image=logout_pic
