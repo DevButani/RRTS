@@ -6,8 +6,8 @@ from functools import partial
 
 def supervisor_page(window,Database,locality):
     try:
-        new_complaints_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2]["new "+locality])
-        complaints_df=pd.read_csv('https://drive.google.com/uc?id='+Database[2][locality])
+        new_complaints_df = pd.read_csv('https://drive.google.com/uc?id='+Database[2]["new "+locality])
+        complaints_df = pd.read_csv('https://drive.google.com/uc?id='+Database[2][locality])
     except:
         messagebox.showerror("Network Connection Failed", "Error while fetching data")
         return
@@ -19,7 +19,8 @@ def supervisor_page(window,Database,locality):
     pending_complaints_df = complaints_df[(complaints_df['Status']=='Pending')]
     pending_complaints_df.reset_index(inplace=True, drop=True)
 
-    current_complaint_no=0
+    total_new_complaints = len(new_complaints_df.index)
+    current_complaint_no = 0
     temp_dict={}
 
     window.overrideredirect(True)
@@ -59,7 +60,37 @@ def supervisor_page(window,Database,locality):
         window.overrideredirect(False)
 
     def refresh():
-        pass
+        nonlocal complaints_df, new_complaints_df, total_new_complaints
+        try:
+            fresh_new_complaints_df = pd.read_csv('https://drive.google.com/uc?id='+Database[2]["new "+locality])
+        except:
+            messagebox.showerror("Network Connection Failed", "Error while fetching data")
+            return
+        
+        if len(fresh_new_complaints_df.index)>total_new_complaints:
+            fresh_new_complaints_df = fresh_new_complaints_df.iloc[total_new_complaints:]
+            new_complaints_df = pd.concat([new_complaints_df, fresh_new_complaints_df], ignore_index=True)
+
+        try:
+            upload_complaints_df = pd.concat([complaints_df, display_df], ignore_index=True)
+            upload_complaints_df.to_csv('temp.csv', index=False)
+            file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2][locality]})
+            file_obj.SetContentFile(filename='temp.csv')
+            file_obj.Upload()
+
+            new_complaints_df.to_csv('temp.csv', index=False)
+            file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2]['new '+locality]})
+            file_obj.SetContentFile(filename='temp.csv')
+            file_obj.Upload()
+            total_new_complaints = len(new_complaints_df.index)
+
+        except:
+            file_obj.content.close()
+            messagebox.showerror("Network Connection Failed", "Error while sending data")
+            return
+
+        reload_schedule_report()
+        reload_sidebar()
 
     logout_img=Image.open('Images/logout.png')
     logout_pic=ImageTk.PhotoImage(logout_img)
@@ -104,29 +135,30 @@ def supervisor_page(window,Database,locality):
         elif(display_df['Status'][row]=="Completed"): display_df.at[row, 'Status'] = "In Progress"
         problems[row].config(text=display_df['Problem'][row] + " at " + display_df['Street'][row] + " | " + display_df['Reporting Date'][row] + " | Status: " + display_df['Status'][row])
 
-        
-    y = 0
-    row_count=len(display_df.index)
-    for row in range(row_count):
-        problems.append(Label(status_canvas, text=display_df['Problem'][row] + " at " + display_df['Street'][row] + " | " + display_df['Reporting Date'][row] + " | Status: " + display_df['Status'][row], bg="#05386b", fg="white", font=("yu gothic ui", 15)))
-        status_canvas.create_window(status_canvas.winfo_screenwidth()*0.01, y+10, window=problems[row], anchor=NW)
-        status_button=Button(status_canvas, text="Change Status", bg="#05386b", fg="white", command=partial(change_status, row), activebackground="#05386b", activeforeground="#5cdb95", font=("yu gothic ui", 15))
-        status_canvas.create_window(status_canvas.winfo_screenwidth()*0.55, y+2.5, window=status_button, anchor=NW)
-        line_separator=Frame(status_canvas, width=int(status_canvas.winfo_screenheight()*1.5), height=2, bg="white")
-        status_canvas.create_window(0, y+56, window=line_separator, anchor=NW)
-        y += 60
+    def reload_schedule_report():
+        nonlocal display_df, pending_complaints_df 
+        y = 0
+        row_count=len(display_df.index)
+        for row in range(row_count):
+            problems.append(Label(status_canvas, text=display_df['Problem'][row] + " at " + display_df['Street'][row] + " | " + display_df['Reporting Date'][row] + " | Status: " + display_df['Status'][row], bg="#05386b", fg="white", font=("yu gothic ui", 15)))
+            status_canvas.create_window(status_canvas.winfo_screenwidth()*0.01, y+10, window=problems[row], anchor=NW)
+            status_button=Button(status_canvas, text="Change Status", bg="#05386b", fg="white", command=partial(change_status, row), activebackground="#05386b", activeforeground="#5cdb95", font=("yu gothic ui", 15))
+            status_canvas.create_window(status_canvas.winfo_screenwidth()*0.55, y+2.5, window=status_button, anchor=NW)
+            line_separator=Frame(status_canvas, width=int(status_canvas.winfo_screenheight()*1.5), height=2, bg="white")
+            status_canvas.create_window(0, y+56, window=line_separator, anchor=NW)
+            y += 60
 
-    row_count2=len(pending_complaints_df.index)
-    for row in range(row_count2):
-        pending_complaint = Label(status_canvas, text=pending_complaints_df['Problem'][row] + " at " + pending_complaints_df['Street'][row] + " | " + pending_complaints_df['Reporting Date'][row] + " | Status: " + pending_complaints_df['Status'][row], bg="#05386b", fg="white", font=("yu gothic ui", 15))
-        status_canvas.create_window(25, y+10, window=pending_complaint, anchor=NW)
-        line_separator=Frame(status_canvas, width=int(status_canvas.winfo_screenheight()*1.5), height=2, bg="white")
-        status_canvas.create_window(0, y+56, window=line_separator, anchor=NW)
-        y += 60
+        row_count2=len(pending_complaints_df.index)
+        for row in range(row_count2):
+            pending_complaint = Label(status_canvas, text=pending_complaints_df['Problem'][row] + " at " + pending_complaints_df['Street'][row] + " | " + pending_complaints_df['Reporting Date'][row] + " | Status: " + pending_complaints_df['Status'][row], bg="#05386b", fg="white", font=("yu gothic ui", 15))
+            status_canvas.create_window(status_canvas.winfo_screenwidth()*0.01, y+10, window=pending_complaint, anchor=NW)
+            line_separator=Frame(status_canvas, width=int(status_canvas.winfo_screenheight()*1.5), height=2, bg="white")
+            status_canvas.create_window(0, y+56, window=line_separator, anchor=NW)
+            y += 60
 
-    scrollbar = Scrollbar(status_canvas, orient=VERTICAL, command=status_canvas.yview)
-    scrollbar.place(relx=1, rely=0, relheight=1, anchor=NE)
-    status_canvas.config(yscrollcommand=scrollbar.set, scrollregion=(0, 0, 0, y))
+        scrollbar = Scrollbar(status_canvas, orient=VERTICAL, command=status_canvas.yview)
+        scrollbar.place(relx=1, rely=0, relheight=1, anchor=NE)
+        status_canvas.config(yscrollcommand=scrollbar.set, scrollregion=(0, 0, 0, y))
 
     header2=Listbox(complaints_frame, bg="#5cdb95", width=complaints_frame.winfo_screenwidth(), height=int(complaints_frame.winfo_screenheight()*0.01), borderwidth=0, highlightthickness=0)
     header2.place(x=0,y=0)
@@ -309,7 +341,7 @@ def supervisor_page(window,Database,locality):
     resource_quantity_title=Label(form_box, text="Req. Quantity: ", bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 15))
     resource_quantity_title.place(x=form_box.winfo_screenwidth()*0.31, y=form_box.winfo_screenheight()*0.43)
 
-            
+
     def set_quantity():
         nonlocal temp_dict
         name=resource_name_variable.get()
@@ -323,9 +355,10 @@ def supervisor_page(window,Database,locality):
     set_label.place(x=form_box.winfo_screenwidth()*0.31, y=form_box.winfo_screenheight()*0.52)
     
     def submit():
-        nonlocal complaints_df, new_complaints_df, current_complaint_no, temp_dict
+        nonlocal pending_complaints_df, complaints_df, new_complaints_df, current_complaint_no, temp_dict
         temp_dict_list=[temp_dict]
         temp_df=pd.DataFrame(temp_dict_list)
+        pending_complaints_df = pd.concat([pending_complaints_df, temp_df], ignore_index=True)
         complaints_df = pd.concat([complaints_df, temp_df], ignore_index=True)
         new_complaints_df.drop(current_complaint_no, inplace=True)
         new_complaints_df.reset_index(drop=True, inplace=True)
@@ -333,10 +366,12 @@ def supervisor_page(window,Database,locality):
         traffic_selection.set("[select]")
         resource_name_variable.set("[select]")
         resource_type_variable.set("[select]")
+        reload_schedule_report()
         reload_sidebar()
 
     submit_button=Button(form_box, text="Submit", bg="white", fg="#05386B", font=("yu gothic ui bold", 17), cursor="hand2", activebackground="white", activeforeground="#05386B", borderwidth=0, width=int(form_box.winfo_screenwidth()*0.007), command=submit, state='disabled')
     submit_button.place(x=form_box.winfo_screenwidth()*0.19, y=form_box.winfo_screenheight()*0.55)
 
     show_frame(complaints_frame)
+    reload_schedule_report()
     reload_sidebar()

@@ -13,6 +13,9 @@ def clerk_page(window, Database, locality):
     logout_img=Image.open('Images/logout.png')
     logout_pic=ImageTk.PhotoImage(logout_img)
 
+    refresh_img=Image.open('Images/refresh.png')
+    refresh_pic=ImageTk.PhotoImage(refresh_img)
+
     clerk_frame=Frame(window)
     clerk_frame.grid(row=0, column=0, sticky='nsew')
 
@@ -21,6 +24,24 @@ def clerk_page(window, Database, locality):
 
     title1=Label(header1, text="CLERK", bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
     title1.place(x=header1.winfo_screenwidth()*0.4, y=header1.winfo_screenheight()*0.01)
+
+    def refresh():
+        nonlocal new_complaints_df
+        if len(new_complaints_df.index)>0:
+            try:
+                new_complaints_df = pd.concat([pd.read_csv('https://drive.google.com/uc?id='+Database[2]["new "+locality]),new_complaints_df], ignore_index=True)
+                new_complaints_df.to_csv('temp.csv', index=False)
+                file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2]['new '+locality]})
+                file_obj.SetContentFile(filename='temp.csv')
+                file_obj.Upload()
+                new_complaints_df.drop(new_complaints_df.index.to_list(), axis=0, inplace=True)
+            except:
+                messagebox.showerror("Network Connection Failed", "Error while sending data")
+                return
+
+    refresh_button=Button(header1, text="Sync-changes  ", image=refresh_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=refresh)
+    refresh_button.image=refresh_pic
+    refresh_button.place(x=header1.winfo_screenwidth()*0.75, y=header1.winfo_screenheight()*0.01)
 
     def exit():
         nonlocal new_complaints_df
