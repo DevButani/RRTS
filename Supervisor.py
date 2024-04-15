@@ -196,8 +196,15 @@ def supervisor_page(window,Database,locality):
 
     fill_form=[]
 
+    system_specs_df = pd.read_csv('system_specs.csv')
+    resource_name_list={
+        "Raw Materials": system_specs_df['Raw_Materials'][0].split(':'),
+        "Machines": system_specs_df['Machines'][0].split(':'),
+        "Personnel": system_specs_df['Personnel'][0].split(':')
+    }
+
     def show_form(complaint_no):
-        nonlocal current_complaint_no, fill_form
+        nonlocal current_complaint_no, fill_form, resource_name_list
         fill_form[current_complaint_no].config(bg="#5cdb95")
         current_complaint_no=complaint_no
         rep_date=new_complaints_df['Reporting Date'][complaint_no]
@@ -213,7 +220,9 @@ def supervisor_page(window,Database,locality):
         resource_name_menu.config(state='normal')
         submit_button.config(state='normal')
         nonlocal temp_dict
-        temp_dict={'Locality': locality, 'Street': new_complaints_df['Street'][complaint_no], 'Problem': new_complaints_df['Problem'][complaint_no], 'Reporting Date': new_complaints_df['Reporting Date'][complaint_no], 'Severity': "Mild", 'Traffic': "Extreme", 'Asphalt': 0, 'Bitumen': 0, 'Concrete': 0, 'Bulldozer': 0, 'Road Roller': 0, 'Concrete Mixer': 0, 'Jackhammer': 0, 'Engineer': 0, 'Worker': 0, 'Machine Operator': 0, 'Status': "Pending", 'Completion Date': ""}
+        temp_dict={'Locality': locality, 'Street': new_complaints_df['Street'][complaint_no], 'Problem': new_complaints_df['Problem'][complaint_no], 'Reporting Date': new_complaints_df['Reporting Date'][complaint_no], 'Severity': "Mild", 'Traffic': "Extreme", 'Status': "Pending", 'Completion Date': ""}
+        for resource in resource_name_list["Raw Materials"]+resource_name_list["Machines"]+resource_name_list["Personnel"]:
+            temp_dict[resource]=0
         fill_form[complaint_no].config(bg="white")
 
     def reload_sidebar():
@@ -292,12 +301,6 @@ def supervisor_page(window,Database,locality):
 
     resource_req_title=Label(form_box, text="Resource Requirement: ", bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 17))
     resource_req_title.place(x=form_box.winfo_screenwidth()*0.03, y=form_box.winfo_screenheight()*0.375)
-
-    resource_name_list={
-                "Raw Materials": ["Asphalt", "Bitumen", "Concrete"],
-                "Machines": ["Bulldozer", "Road Roller", "Concrete Mixer", "Jackhammer"],
-                "Personnel": ["Engineer", "Worker", "Machine Operator"]
-            }
 
     def unlock_entry(value):
         resource_name_variable.set(value)

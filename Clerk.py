@@ -85,9 +85,10 @@ def clerk_page(window, Database, locality):
     street_entry = Entry(form_box, bg="#05386b", fg="white", font=("yu gothic ui", 20), width=int(form_box.winfo_screenwidth()*0.01), highlightthickness=2, highlightcolor="white")
     street_entry.place(x=form_box.winfo_screenwidth()*0.19, y=form_box.winfo_screenheight()*0.3)
 
+    system_specs_df = pd.read_csv('system_specs.csv')
     problem_title = Label(form_box, text="Problem: ", bg="#05386b", fg="#5cdb95", font=("yu gothic ui bold", 20))
     problem_title.place(x=form_box.winfo_screenwidth()*0.4, y=form_box.winfo_screenheight()*0.3)
-    problem_options = ["Potholes", "Broken Footpath", "Cracking", "Waterlogging", "Ravelling", "Road Rutting", "Uneven Road"]
+    problem_options = system_specs_df['Problem_options'][0].split(':')
     problem_variable = StringVar()
     problem_variable.set(problem_options[0])
     problem_menu = OptionMenu(form_box, problem_variable, *problem_options)

@@ -199,10 +199,11 @@ def admin_page(window, Database, login_info_df):
     box2=Frame(centre2, bg="#05386B", borderwidth=0, highlightthickness=0, width=int(resource_update_frame.winfo_screenwidth()*0.7), height=int(resource_update_frame.winfo_screenheight()*0.7))
     box2.place(x=resource_update_frame.winfo_screenwidth()*0.15, y=resource_update_frame.winfo_screenheight()*0.1)
 
+    system_specs_df = pd.read_csv('system_specs.csv')
     resource_name_dict={
-        "Raw Materials": ["Asphalt", "Bitumen", "Concrete"],
-        "Machines": ["Bulldozer", "Road Roller", "Concrete Mixer", "Jackhammer"],
-        "Personnel": ["Engineer", "Worker", "Machine Operator"]
+        "Raw Materials": system_specs_df['Raw_Materials'][0].split(':'),
+        "Machines": system_specs_df['Machines'][0].split(':'),
+        "Personnel": system_specs_df['Personnel'][0].split(':')
     }
 
     def register_entries():

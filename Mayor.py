@@ -13,6 +13,8 @@ def mayor_page(window,Database,locality_options):
         return
     completed_df=schedule_df[schedule_df['Status']=="Completed"]
     completed_df['Completion Date']=pd.to_datetime(completed_df['Completion Date'], format='%Y-%m-%d')
+
+    system_specs_df = pd.read_csv('system_specs.csv')
     
     logo_img=Image.open('Images/logo_s.png')
     logo_pic=ImageTk.PhotoImage(logo_img)
@@ -81,7 +83,7 @@ def mayor_page(window,Database,locality_options):
     stat105=Label(report1, bg="#05386b", fg="white", text="Problem: ", font=("yu gothic ui", 15))
     stat105.place(x=report1.winfo_screenwidth()*0.25, y=report1.winfo_screenheight()*0.125)    
 
-    problem_options=["Potholes", "Broken Footpath", "Cracking", "Waterlogging", "Ravelling", "Road Rutting", "Uneven Road"]
+    problem_options=system_specs_df['Problem_options'][0].split(':')
     problem_variable1 = StringVar()
     problem_variable1.set("Any")
     problem_menu1 = OptionMenu(report1, problem_variable1, "Any", *problem_options)
@@ -154,9 +156,9 @@ def mayor_page(window,Database,locality_options):
 
     resource_name_dict={
         "All": ["All"],
-        "Raw Materials": ["Asphalt", "Bitumen", "Concrete"],
-        "Machines": ["Bulldozer", "Road Roller", "Concrete Mixer", "Jackhammer"],
-        "Personnel": ["Engineer", "Worker", "Machine Operator"]
+        "Raw Materials": system_specs_df['Raw_Materials'][0].split(':'),
+        "Machines": system_specs_df['Machines'][0].split(':'),
+        "Personnel": system_specs_df['Personnel'][0].split(':')
     }
     def set_resource_names(type):
         menu = resource_name_menu1["menu"]
