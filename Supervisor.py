@@ -3,6 +3,7 @@ from tkinter import messagebox
 from PIL import ImageTk, Image  # type "Pip install pillow" in your terminal to install ImageTk and Image module
 import pandas as pd
 from functools import partial
+from datetime import date
 
 def supervisor_page(window,Database,locality):
     try:
@@ -131,7 +132,9 @@ def supervisor_page(window,Database,locality):
 
     def change_status(row):
         nonlocal display_df
-        if(display_df['Status'][row]=="In Progress"): display_df.at[row, 'Status'] = "Completed"
+        if(display_df['Status'][row]=="In Progress"): 
+            display_df.at[row, 'Status'] = "Completed"
+            display_df.at[row, 'Completion Date'] = str(date.today())
         elif(display_df['Status'][row]=="Completed"): display_df.at[row, 'Status'] = "In Progress"
         problems[row].config(text=display_df['Problem'][row] + " at " + display_df['Street'][row] + " | " + display_df['Reporting Date'][row] + " | Status: " + display_df['Status'][row])
 
@@ -192,12 +195,13 @@ def supervisor_page(window,Database,locality):
         nonlocal current_complaint_no, fill_form
         fill_form[current_complaint_no].config(bg="#5cdb95")
         current_complaint_no=complaint_no
-        complaint_no_label.config(text="")
-        # complaint_no_label.config(text="Complaint No. XYZ123", fg="#5cdb95")
+        rep_date=new_complaints_df['Reporting Date'][complaint_no]
+        complaint_id=str(new_complaints_df['Street'][complaint_no][:2]+new_complaints_df['Problem'][complaint_no][:2]+rep_date[-2:]+rep_date[5:7]).upper()
+        complaint_no_label.config(text="Complaint ID "+complaint_id, fg="#5cdb95")
         locality_label.config(text=locality)
         street_label.config(text=new_complaints_df['Street'][complaint_no])
         problem_label.config(text=new_complaints_df['Problem'][complaint_no])
-        reporting_date_label.config(text=new_complaints_df['Reporting Date'][complaint_no])
+        reporting_date_label.config(text=rep_date[-2:]+"/"+rep_date[5:7]+"/"+rep_date[:4])
         severity_menu.config(state='normal')
         traffic_menu.config(state='normal')
         resource_type_menu.config(state='normal')
