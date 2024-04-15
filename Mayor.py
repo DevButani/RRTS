@@ -30,7 +30,7 @@ def mayor_page(window,Database,locality_options):
 
     title1=Label(header1, image=logo_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
     title1.image=logo_pic
-    title1.place(x=header1.winfo_screenwidth()*0.45, y=header1.winfo_screenheight()*0.005)
+    title1.place(x=header1.winfo_screenwidth()*0.45, y=header1.winfo_screenheight()*0.001)
 
     centre1=Listbox(mayor_frame, bg="white", width=mayor_frame.winfo_screenwidth(), height=int(mayor_frame.winfo_screenheight()), borderwidth=0, highlightthickness=0)
     centre1.place(x=0,y=mayor_frame.winfo_screenheight()*0.1)

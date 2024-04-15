@@ -107,7 +107,7 @@ def supervisor_page(window,Database,locality):
 
     title1=Label(header1, image=logo_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
     title1.image=logo_pic
-    title1.place(x=header1.winfo_screenwidth()*0.45, y=header1.winfo_screenheight()*0.005)
+    title1.place(x=header1.winfo_screenwidth()*0.45, y=header1.winfo_screenheight()*0.001)
 
     logout_button1=Button(header1, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
     logout_button1.image=logout_pic
@@ -172,7 +172,7 @@ def supervisor_page(window,Database,locality):
 
     title2=Label(header2, image=logo_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
     title2.image=logo_pic
-    title2.place(x=header2.winfo_screenwidth()*0.45, y=header2.winfo_screenheight()*0.005)
+    title2.place(x=header2.winfo_screenwidth()*0.45, y=header2.winfo_screenheight()*0.001)
 
     logout_button2=Button(header2, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
     logout_button2.image=logout_pic

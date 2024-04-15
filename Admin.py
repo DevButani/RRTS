@@ -174,7 +174,7 @@ def admin_page(window, Database, login_info_df):
 
     title2=Label(header2, image=logo_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
     title2.image=logo_pic
-    title2.place(x=header2.winfo_screenwidth()*0.45, y=header2.winfo_screenheight()*0.005)
+    title2.place(x=header2.winfo_screenwidth()*0.45, y=header2.winfo_screenheight()*0.001)
 
     logout_button2=Button(header2, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
     logout_button2.image=logout_pic
@@ -265,7 +265,7 @@ def admin_page(window, Database, login_info_df):
 
     title3=Label(header3, image=logo_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
     title3.image=logo_pic
-    title3.place(x=header3.winfo_screenwidth()*0.45, y=header3.winfo_screenheight()*0.005)
+    title3.place(x=header3.winfo_screenwidth()*0.45, y=header3.winfo_screenheight()*0.001)
 
     logout_button3=Button(header3, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
     logout_button3.image=logout_pic
