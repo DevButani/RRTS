@@ -60,7 +60,8 @@ localities_list = [x for x in links_df['File'].to_list() if(x[:3]!="new" and x n
 # map categories to values
 severity_map = {"Critical": 3, "Severe": 2, "Moderate": 1, "Mild": 0}
 traffic_map = {"Extreme": 4, "Heavy": 3, "Medium": 2, "Light": 1, "Deserted": 0}
-resources_list = ["Asphalt", "Bitumen", "Concrete", "Engineer", "Worker", "Machine Operator", "Bulldozer", "Road Roller", "Concrete Mixer", "Jackhammer"]
+system_specs_df = pd.read_csv('system_specs.csv')
+resources_list = system_specs_df['Raw_Materials'][0].split(':') + system_specs_df['Machines'][0].split(':') + system_specs_df['Personnel'][0].split(':')
 
 while True:
     current_date = date.today()
@@ -70,7 +71,7 @@ while True:
     sleep((10 - current_time.minute % 10)*60 - current_time.second)
 
     # get complaints
-    complaints_df = pd.DataFrame(columns=['Locality','Street','Problem','Reporting Date','Severity','Traffic','Asphalt','Bitumen','Concrete','Bulldozer','Road Roller','Concrete Mixer','Jackhammer','Engineer','Worker','Machine Operator','Status','Completion Date'])
+    complaints_df = pd.DataFrame(columns=['Locality','Street','Problem','Reporting Date','Severity','Traffic']+resources_list+['Status','Completion Date'])
     try:
         for locality in localities_list:
             complaints_df = pd.concat([complaints_df,pd.read_csv('https://drive.google.com/uc?id='+database_file[locality])], ignore_index=True)
@@ -106,8 +107,12 @@ while True:
     for indx in range(pending_complaint_count):
         score = 10*severity_map[pending_complaints_df['Severity'][indx]] + 15*traffic_map[pending_complaints_df['Traffic'][indx]] + (current_date - datetime.strptime(pending_complaints_df['Reporting Date'][indx], '%Y-%m-%d').date()).days
         resources_req = 0
-        for i in range(len(resources_list)):
-            resources_req += 10**(min(int(i/3),2)) * pending_complaints_df[resources_list[i]][indx]
+        for resource in system_specs_df['Raw_Materials'][0].split(':'):
+            resources_req += pending_complaints_df[resource][indx]
+        for resource in system_specs_df['Personnel'][0].split(':'):
+            resources_req += 10 * pending_complaints_df[resource][indx]
+        for resource in system_specs_df['Machines'][0].split(':'):
+            resources_req += 100 * pending_complaints_df[resource][indx]
         pending_scheduler_score.append((int(score/10),indx,resources_req))
 
     # sort the list of pending complaints according to higher score-bin number and lower resource-requirement coefficients (for comparison within a bin)
