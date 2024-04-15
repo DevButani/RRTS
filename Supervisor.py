@@ -357,13 +357,15 @@ def supervisor_page(window,Database,locality):
     def set_quantity():
         nonlocal temp_dict
         name=resource_name_variable.get()
+        if name=="[select]":
+            return
         temp_dict[name]=resource_quantity_variable.get()
         set_label.config(text=name+" set to "+str(resource_quantity_variable.get()))
 
     resource_quantity_button=Button(form_box, text="Set", bg="white", fg="#05386b", borderwidth=0, highlightthickness=0, activebackground="white", activeforeground="#05386b", font=("yu gothic ui", 12), width=int(form_box.winfo_screenwidth()*0.004), command=set_quantity)
     resource_quantity_button.place(x=form_box.winfo_screenwidth()*0.42, y=form_box.winfo_screenheight()*0.48)
 
-    set_label=Label(form_box, text="", bg="#05386b", fg="green", font=("yu gothic ui bold", 10))
+    set_label=Label(form_box, text="", bg="#05386b", fg="white", font=("yu gothic ui bold", 10))
     set_label.place(x=form_box.winfo_screenwidth()*0.31, y=form_box.winfo_screenheight()*0.52)
     
     def submit():
@@ -392,6 +394,7 @@ def supervisor_page(window,Database,locality):
         resource_type_menu.config(state="disabled")
         resource_quantity_entry.config(state="disabled")
         resource_quantity_variable.set(0)
+        set_label.config(text="")
         reload_schedule_report()
         reload_sidebar()
 
