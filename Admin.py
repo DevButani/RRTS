@@ -36,7 +36,7 @@ def admin_page(window, Database, login_info_df):
 
     def exit():
         try:
-            nonlocal login_info_df, unauthorized_df
+            nonlocal resources_df, login_info_df, unauthorized_df, resources_updated, login_info_updated
             if resources_updated:
                 resources_df.to_csv('temp.csv', index=False)
                 file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2]["Resources"]})
@@ -62,7 +62,27 @@ def admin_page(window, Database, login_info_df):
         window.overrideredirect(False)
 
     def refresh():
-        pass
+        try:
+            nonlocal resources_df, login_info_df, unauthorized_df, resources_updated, login_info_updated
+            if resources_updated:
+                resources_df.to_csv('temp.csv', index=False)
+                file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2]["Resources"]})
+                file_obj.SetContentFile(filename='temp.csv')
+                file_obj.Upload()
+                resources_updated = False
+
+            if login_info_updated:
+                upload_login_info_df = pd.concat([login_info_df,unauthorized_df], ignore_index=True)
+                upload_login_info_df.to_csv('temp.csv', index=False)
+                file_obj = Database[0].CreateFile({'parents': [{'id': Database[1]}], 'id': Database[2]["Login Info"]})
+                file_obj.SetContentFile(filename='temp.csv')
+                file_obj.Upload()
+                login_info_updated = False
+            
+        except:
+            file_obj.content.close()
+            messagebox.showerror("Network Connection Failed", "Error while sending data")
+            return
 
     logout_img=Image.open('Images/logout.png')
     logout_pic=ImageTk.PhotoImage(logout_img)
