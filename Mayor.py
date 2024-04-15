@@ -14,6 +14,9 @@ def mayor_page(window,Database,locality_options):
     completed_df=schedule_df[schedule_df['Status']=="Completed"]
     completed_df['Completion Date']=pd.to_datetime(completed_df['Completion Date'], format='%Y-%m-%d')
     
+    logo_img=Image.open('Images/logo_s.png')
+    logo_pic=ImageTk.PhotoImage(logo_img)
+
     logout_img=Image.open('Images/logout.png')
     logout_pic=ImageTk.PhotoImage(logout_img)
 
@@ -25,8 +28,9 @@ def mayor_page(window,Database,locality_options):
     header1=Listbox(mayor_frame, bg="#5cdb95", width=mayor_frame.winfo_screenwidth(), height=int(mayor_frame.winfo_screenheight()*0.01), borderwidth=0, highlightthickness=0)
     header1.place(x=0,y=0)
 
-    title1=Label(header1, text="MAYOR", bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
-    title1.place(x=header1.winfo_screenwidth()*0.4, y=header1.winfo_screenheight()*0.01)
+    title1=Label(header1, image=logo_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
+    title1.image=logo_pic
+    title1.place(x=header1.winfo_screenwidth()*0.45, y=header1.winfo_screenheight()*0.005)
 
     centre1=Listbox(mayor_frame, bg="white", width=mayor_frame.winfo_screenwidth(), height=int(mayor_frame.winfo_screenheight()), borderwidth=0, highlightthickness=0)
     centre1.place(x=0,y=mayor_frame.winfo_screenheight()*0.1)

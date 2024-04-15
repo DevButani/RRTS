@@ -93,6 +93,9 @@ def supervisor_page(window,Database,locality):
         reload_schedule_report()
         reload_sidebar()
 
+    logo_img=Image.open('Images/logo_s.png')
+    logo_pic=ImageTk.PhotoImage(logo_img)
+
     logout_img=Image.open('Images/logout.png')
     logout_pic=ImageTk.PhotoImage(logout_img)
 
@@ -102,8 +105,9 @@ def supervisor_page(window,Database,locality):
     header1=Listbox(schedule_report_frame, bg="#5cdb95", width=schedule_report_frame.winfo_screenwidth(), height=int(schedule_report_frame.winfo_screenheight()*0.01), borderwidth=0, highlightthickness=0)
     header1.place(x=0,y=0)
 
-    title1=Label(header1, text="SUPERVISOR", bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
-    title1.place(x=header1.winfo_screenwidth()*0.4, y=header1.winfo_screenheight()*0.01)
+    title1=Label(header1, image=logo_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
+    title1.image=logo_pic
+    title1.place(x=header1.winfo_screenwidth()*0.45, y=header1.winfo_screenheight()*0.005)
 
     logout_button1=Button(header1, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
     logout_button1.image=logout_pic
@@ -166,8 +170,9 @@ def supervisor_page(window,Database,locality):
     header2=Listbox(complaints_frame, bg="#5cdb95", width=complaints_frame.winfo_screenwidth(), height=int(complaints_frame.winfo_screenheight()*0.01), borderwidth=0, highlightthickness=0)
     header2.place(x=0,y=0)
 
-    title2=Label(header2, text="SUPERVISOR", bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
-    title2.place(x=header2.winfo_screenwidth()*0.4, y=header2.winfo_screenheight()*0.01)
+    title2=Label(header2, image=logo_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
+    title2.image=logo_pic
+    title2.place(x=header2.winfo_screenwidth()*0.45, y=header2.winfo_screenheight()*0.005)
 
     logout_button2=Button(header2, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
     logout_button2.image=logout_pic

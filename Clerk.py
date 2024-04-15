@@ -10,6 +10,9 @@ def clerk_page(window, Database, locality):
 
     new_complaints_df = pd.DataFrame(columns=['Locality','Street','Problem','Reporting Date'])
 
+    logo_img=Image.open('Images/logo_s.png')
+    logo_pic=ImageTk.PhotoImage(logo_img)
+
     logout_img=Image.open('Images/logout.png')
     logout_pic=ImageTk.PhotoImage(logout_img)
 
@@ -22,8 +25,9 @@ def clerk_page(window, Database, locality):
     header1=Listbox(clerk_frame, bg="#5cdb95", width=clerk_frame.winfo_screenwidth(), height=int(clerk_frame.winfo_screenheight()*0.01), borderwidth=0, highlightthickness=0)
     header1.place(x=0,y=0)
 
-    title1=Label(header1, text="CLERK", bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
-    title1.place(x=header1.winfo_screenwidth()*0.4, y=header1.winfo_screenheight()*0.01)
+    title1=Label(header1, image=logo_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
+    title1.image=logo_pic
+    title1.place(x=header1.winfo_screenwidth()*0.45, y=header1.winfo_screenheight()*0.005)
 
     def refresh():
         nonlocal new_complaints_df

@@ -84,6 +84,9 @@ def admin_page(window, Database, login_info_df):
             messagebox.showerror("Network Connection Failed", "Error while sending data")
             return
 
+    logo_img=Image.open('Images/logo_s.png')
+    logo_pic=ImageTk.PhotoImage(logo_img)
+
     logout_img=Image.open('Images/logout.png')
     logout_pic=ImageTk.PhotoImage(logout_img)
 
@@ -93,8 +96,9 @@ def admin_page(window, Database, login_info_df):
     header1=Listbox(resource_check_frame, bg="#5cdb95", width=resource_check_frame.winfo_screenwidth(), height=int(resource_check_frame.winfo_screenheight()*0.01), borderwidth=0, highlightthickness=0)
     header1.place(x=0,y=0)
 
-    title1=Label(header1, text="CITY ADMIN", bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
-    title1.place(x=header1.winfo_screenwidth()*0.45, y=header1.winfo_screenheight()*0.01)
+    title1=Label(header1, image=logo_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
+    title1.image=logo_pic
+    title1.place(x=header1.winfo_screenwidth()*0.45, y=header1.winfo_screenheight()*0.005)
 
     logout_button1=Button(header1, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
     logout_button1.image=logout_pic
@@ -168,8 +172,9 @@ def admin_page(window, Database, login_info_df):
     header2=Listbox(resource_update_frame, bg="#5cdb95", width=resource_check_frame.winfo_screenwidth(), height=int(resource_check_frame.winfo_screenheight()*0.01), borderwidth=0, highlightthickness=0)
     header2.place(x=0,y=0)
 
-    title2=Label(header2, text="CITY ADMIN", bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
-    title2.place(x=header2.winfo_screenwidth()*0.45, y=header2.winfo_screenheight()*0.01)
+    title2=Label(header2, image=logo_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
+    title2.image=logo_pic
+    title2.place(x=header2.winfo_screenwidth()*0.45, y=header2.winfo_screenheight()*0.005)
 
     logout_button2=Button(header2, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
     logout_button2.image=logout_pic
@@ -258,8 +263,9 @@ def admin_page(window, Database, login_info_df):
     header3=Listbox(authorization_frame, bg="#5cdb95", width=authorization_frame.winfo_screenwidth(), height=int(authorization_frame.winfo_screenheight()*0.01), borderwidth=0, highlightthickness=0)
     header3.place(x=0,y=0)
 
-    title3=Label(header3, text="CITY ADMIN", bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
-    title3.place(x=header3.winfo_screenwidth()*0.45, y=header3.winfo_screenheight()*0.01)
+    title3=Label(header3, image=logo_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui bold", 30))
+    title3.image=logo_pic
+    title3.place(x=header3.winfo_screenwidth()*0.45, y=header3.winfo_screenheight()*0.005)
 
     logout_button3=Button(header3, text="Logout  ", image=logout_pic, bg="#5cdb95", fg="#05386b", font=("yu gothic ui", 15), borderwidth=0, highlightthickness=0, activebackground="#5cdb95", activeforeground="#05386b", cursor="hand2", compound="right", command=exit)
     logout_button3.image=logout_pic

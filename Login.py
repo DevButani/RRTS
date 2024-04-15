@@ -128,12 +128,12 @@ side_bar1.place(x=0,y=0)
 central_frame1 = Frame(LoginPage, bg="white", height=window.winfo_screenheight(), width=window.winfo_screenwidth()*0.8)
 central_frame1.place(x=window.winfo_screenwidth()*0.2, y=0)
 
-bg_img1 = Image.open('Images/bg.png')
-bg_pic1 = ImageTk.PhotoImage(bg_img1)
+logo_img=Image.open('Images/logo.png')
+logo_pic=ImageTk.PhotoImage(logo_img)
 
-bg_label1 = Label(side_bar1, image=bg_pic1, bg="black", width=window.winfo_screenwidth()*0.2, height=window.winfo_screenheight())
-bg_label1.image=bg_pic1
-bg_label1.place(x=0, y=0)
+bg_label1 = Label(side_bar1, image=logo_pic, bg="#5cdb95")
+bg_label1.image=logo_pic
+bg_label1.place(x=side_bar1.winfo_screenwidth()*0.005, y=side_bar1.winfo_screenheight()*0.1)
 
 login_box1 = Listbox(central_frame1, bg="#05386B", width=int(window.winfo_screenwidth()*0.08), height=int(window.winfo_screenheight()*0.04), highlightthickness=2, borderwidth=0, highlightbackground="#05386B", highlightcolor="#05386B")
 login_box1.place(x=central_frame1.winfo_screenwidth()*0.17, y=central_frame1.winfo_screenheight()*0.19)
@@ -286,12 +286,9 @@ side_bar2.place(x=0,y=0)
 central_frame2=Frame(SignupPage, bg="white", height=window.winfo_screenheight(), width=window.winfo_screenwidth()*0.8)
 central_frame2.place(x=window.winfo_screenwidth()*0.2, y=0)
 
-bg_img2 = Image.open('Images/bg.png')
-bg_pic2 = ImageTk.PhotoImage(bg_img2)
-
-bg_label2=Label(side_bar2, image=bg_pic2, bg="black", width=window.winfo_screenwidth()*0.2, height=window.winfo_screenheight())
-bg_label2.image=bg_pic2
-bg_label2.place(x=0, y=0)
+bg_label2 = Label(side_bar2, image=logo_pic, bg="#5cdb95")
+bg_label2.image=logo_pic
+bg_label2.place(x=side_bar2.winfo_screenwidth()*0.005, y=side_bar2.winfo_screenheight()*0.1)
 
 login_box2=Listbox(central_frame2, bg="#05386B", width=int(window.winfo_screenwidth()*0.08), height=int(window.winfo_screenheight()*0.04), highlightthickness=2, borderwidth=0, highlightbackground="#05386B", highlightcolor="#05386B")
 login_box2.place(x=central_frame2.winfo_screenwidth()*0.17, y=central_frame2.winfo_screenheight()*0.19)
