@@ -33,39 +33,66 @@ links_dict = {
 
 file_obj = drive.CreateFile({'title' : 'RRTS', 'mimeType' : 'application/vnd.google-apps.folder'})
 file_obj.Upload()
+file_obj.InsertPermission({'type': 'anyone', 'value': 'anyone', 'role': 'reader', 'withLink': True})
 system_specs_dict['Folder'] = file_obj['id']
 
 localities_list = []
-num=int(input("Enter the number of localities"))
+num=int(input("Enter the number of localities: "))
 print("Enter the names of the localities")
 for i in range(num):
     localities_list.append(input())
 
-num=int(input("Enter the number of types of road problems"))
+num=int(input("Enter the number of types of road problems: "))
 print("Enter the names of the types")
 for i in range(num):
     if i==0: system_specs_dict['Problem_options']+=input()
     else: system_specs_dict['Problem_options']+=':'+input()
 
-num=int(input("Enter the number of types of raw materials"))
+num=int(input("Enter the number of types of raw materials: "))
 print("Enter the names of the types")
 for i in range(num):
     if i==0: system_specs_dict['Raw_Materials']+=input()
     else: system_specs_dict['Raw_Materials']+=':'+input()
 
-num=int(input("Enter the number of types of machines"))
+num=int(input("Enter the number of types of machines: "))
 print("Enter the names of the types")
 for i in range(num):
     if i==0: system_specs_dict['Machines']+=input()
     else: system_specs_dict['Machines']+=':'+input()
 
-num=int(input("Enter the number of types of personnel"))
+num=int(input("Enter the number of types of personnel: "))
 print("Enter the names of the types")
 for i in range(num):
     if i==0: system_specs_dict['Personnel']+=input()
     else: system_specs_dict['Personnel']+=':'+input()
 
-login_info_df = pd.DataFrame(columns=["Type","Name","Locality","Email Id","Password","Authorized"])
+login_info_dict = {
+    'Type': ["Admin","Mayor"],
+    'Name': ["City Admin","Mayor"],
+    'Locality': ["-","-"],
+    'Email Id': [],
+    'Password': [],
+    'Authorized': ["-","-"]
+}
+def encrypt(password):
+    mod1 = 0
+    mod2 = 0
+    mod3 = 0
+    for i in range(len(password)):
+        mod1 = (mod1*97 + ord(password[i]) - 31) % (17)
+        mod2 = (mod2*97 + ord(password[i]) - 31) % int(1e9+7)
+        mod3 = (mod3*97 + ord(password[i]) - 31) % int((1e18+1)/(1e6+1))
+    return str(hex(mod1)) + str(hex(mod2)) + str(hex(mod3))
+email=input("Enter the Email Id of the City Admin: ")
+login_info_dict['Email Id'].append(email)
+password=input("Enter the Password of the City Admin: ")
+login_info_dict['Password'].append(encrypt(password))
+email=input("Enter the Email Id of the Mayor: ")
+login_info_dict['Email Id'].append(email)
+password=input("Enter the Password of the Mayor: ")
+login_info_dict['Password'].append(encrypt(password))
+
+login_info_df = pd.DataFrame(login_info_dict)
 login_info_df.to_csv('temp.csv', index=False)
 file_obj = drive.CreateFile({'parents': [{'id': system_specs_dict['Folder']}], 'title': 'Login Info.csv'})
 file_obj.SetContentFile(filename='temp.csv')
